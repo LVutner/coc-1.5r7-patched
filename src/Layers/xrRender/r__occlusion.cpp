@@ -45,7 +45,7 @@ u32 R_occlusion::occq_begin(u32& ID)
     //	Igor: prevent release crash if we issue too many queries
     if (pool.empty())
     {
-        if ((Device.dwFrame % 40) == 0)
+        if ((Device.dwFrame % 100) == 0)
             Msg(" RENDER [Warning]: Too many occlusion queries were issued(>1536)!!!");
         ID = iInvalidHandle;
         return 0;
@@ -99,27 +99,8 @@ R_occlusion::occq_result R_occlusion::occq_get(u32& ID)
     HRESULT hr;
     // CHK_DX		(used[ID].Q->GetData(&fragments,sizeof(fragments),D3DGETDATA_FLUSH));
     // Msg			("get  : [%2d] - %d => %d", used[ID].order, ID, fragments);
-    CTimer T;
-    T.Start();
-    RImplementation.BasicStats.Wait.Begin();
-    // while	((hr=used[ID].Q->GetData(&fragments,sizeof(fragments),D3DGETDATA_FLUSH))==S_FALSE) {
-    VERIFY2(ID < used.size(), make_string("_Pos = %d, size() = %d ", ID, used.size()));
-    while ((hr = GetData(used[ID].Q, &fragments, sizeof(fragments))) == S_FALSE)
-    {
-        if (!SwitchToThread())
-            Sleep(ps_r2_wait_sleep);
-
-        if (T.GetElapsed_ms() > 500)
-        {
-            fragments = (occq_result)-1; // 0xffffffff;
-            break;
-        }
-    }
-    RImplementation.BasicStats.Wait.End();
-#ifndef USE_OGL
-    if (hr == D3DERR_DEVICELOST)
-        fragments = 0xffffffff;
-#endif
+	if ( ( hr = GetData( used[ID].Q, &fragments, sizeof( fragments ) ) ) == S_FALSE )
+		fragments = ( occq_result ) - 1; //0xffffffff;
 
     if (0 == fragments)
         RImplementation.BasicStats.OcclusionCulled++;

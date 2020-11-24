@@ -58,15 +58,21 @@ occRasterizer::occRasterizer()
     : dbg_HOM_draw_initialized(false)
 #endif
 {
+    ZeroMemory(bufFrame, sizeof(bufFrame));
+    ZeroMemory(bufDepth, sizeof(bufDepth));
+    ZeroMemory(bufDepth_0, sizeof(bufDepth_0));
+    ZeroMemory(bufDepth_1, sizeof(bufDepth_1));
+    ZeroMemory(bufDepth_2, sizeof(bufDepth_2));
+    ZeroMemory(bufDepth_3, sizeof(bufDepth_3));
 }
 
 occRasterizer::~occRasterizer() {}
 void occRasterizer::clear()
 {
-    u32 size = occ_dim * occ_dim;
+    size_t size = occ_dim * occ_dim;
     float f = 1.f;
-    MemFill32(bufFrame, 0, size);
-    MemFill32(bufDepth, *LPDWORD(&f), size);
+    ZeroMemory(bufFrame, sizeof(bufFrame));
+    MemFill32(bufDepth, *(u32 *)(&f), size);
 }
 
 IC BOOL shared(occTri* T1, occTri* T2)

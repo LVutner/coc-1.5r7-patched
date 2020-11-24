@@ -150,6 +150,9 @@ void CRender::OnFrame()
 {
     Models->DeleteQueue();
 
+	if (IGame_Persistent::MainMenuActiveOrLevelNotExist())
+		return;
+	
     if (ps_r2_ls_flags.test(R2FLAG_EXP_MT_CALC))
     {
         // MT-details (@front)

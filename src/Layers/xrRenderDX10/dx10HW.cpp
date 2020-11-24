@@ -103,7 +103,7 @@ void CHW::CreateDevice(HWND m_hWnd, bool move_window)
     //  TODO: DX10: implement dynamic format selection
     // sd.BufferDesc.Format     = fTarget;
     sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    sd.BufferCount = 1;
+    sd.BufferCount = 2;
 
     // Multisample
     sd.SampleDesc.Count = 1;
@@ -148,6 +148,10 @@ void CHW::CreateDevice(HWND m_hWnd, bool move_window)
         D3D_DRIVER_TYPE_UNKNOWN, // Если мы выбираем конкретный адаптер, то мы обязаны использовать D3D_DRIVER_TYPE_UNKNOWN.
         NULL, createDeviceFlags, pFeatureLevels, sizeof(pFeatureLevels) / sizeof(pFeatureLevels[0]),
         D3D11_SDK_VERSION, &pDevice, &FeatureLevel, &pContext);
+		
+	IDXGIDevice1* pDeviceDXGI = nullptr;
+	R_CHK(pDevice->QueryInterface(__uuidof(IDXGIDevice1), reinterpret_cast<void**>(&pDeviceDXGI)));
+	R_CHK(pDeviceDXGI->SetMaximumFrameLatency(1));
     
 #ifdef COC_DEBUG
     R_CHK(pContext->QueryInterface(__uuidof(UserDefinedAnnotation), reinterpret_cast<void**>(&UserDefinedAnnotation)));

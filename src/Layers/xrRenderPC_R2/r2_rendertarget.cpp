@@ -187,6 +187,20 @@ void generate_jitter(DWORD* dest, u32 elem_count)
         *dest = color_rgba(samples[2 * it].x, samples[2 * it].y, samples[2 * it + 1].y, samples[2 * it + 1].x);
 }
 
+void manually_assign_texture(ref_shader& shader, pcstr samplerName, pcstr rendertargetTextureName)
+{
+    SPass& pass = *shader->E[0]->passes[0];
+    ref_constant constant = pass.constants->get(samplerName);
+    if (!constant)
+    {
+        Msg("! Trying to manually assign a texture[%s] to [%s] but %s doesn't exist.",
+            rendertargetTextureName, samplerName, samplerName);
+        return;
+    }
+    const auto index = constant->samp.index;
+    pass.T->create_texture(index, rendertargetTextureName, false);
+}
+
 CRenderTarget::CRenderTarget()
 {
     param_blur = 0.f;
@@ -279,6 +293,7 @@ CRenderTarget::CRenderTarget()
     s_occq.create(b_occq, "r2\\occq");
 
     // DIRECT (spot)
+    pcstr smapTarget = r2_RT_smap_depth;
     D3DFORMAT depth_format = (D3DFORMAT)RImplementation.o.HW_smap_FORMAT;
 
     if (RImplementation.o.HW_smap)
@@ -295,7 +310,10 @@ CRenderTarget::CRenderTarget()
         s_accum_direct.create(b_accum_direct, "r2\\accum_direct");
         s_accum_direct_cascade.create(b_accum_direct_cascade, "r2\\accum_direct_cascade");
         if (RImplementation.o.advancedpp)
+        {
             s_accum_direct_volumetric_cascade.create("accum_volumetric_sun_cascade");
+            manually_assign_texture(s_accum_direct_volumetric_cascade, "s_smap", smapTarget);
+        }
     }
     else
     {
@@ -308,7 +326,10 @@ CRenderTarget::CRenderTarget()
         s_accum_direct.create(b_accum_direct, "r2\\accum_direct");
         s_accum_direct_cascade.create(b_accum_direct_cascade, "r2\\accum_direct_cascade");
         if (RImplementation.o.advancedpp)
+        {
             s_accum_direct_volumetric_cascade.create("accum_volumetric_sun_cascade");
+            manually_assign_texture(s_accum_direct_volumetric_cascade, "s_smap", smapTarget);
+        }
     }
 
     // POINT
@@ -329,6 +350,7 @@ CRenderTarget::CRenderTarget()
 
     {
         s_accum_volume.create("accum_volumetric", "lights\\lights_spot01");
+        manually_assign_texture(s_accum_volume, "s_smap", smapTarget);
         accum_volumetric_geom_create();
         g_accum_volumetric.create(D3DFVF_XYZ, g_accum_volumetric_vb, g_accum_volumetric_ib);
     }

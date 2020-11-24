@@ -280,30 +280,6 @@ void CRender::Render()
         Target->phase_scene_prepare();
     }
 
-    //*******
-    // Sync point
-    RImplementation.BasicStats.WaitS.Begin();
-    if (1)
-    {
-        CTimer T;
-        T.Start();
-        BOOL result = FALSE;
-        HRESULT hr = S_FALSE;
-        while ((hr = GetData(q_sync_point[q_sync_count], &result, sizeof(result))) == S_FALSE)
-        {
-            if (!SwitchToThread())
-                Sleep(ps_r2_wait_sleep);
-            if (T.GetElapsed_ms() > 500)
-            {
-                result = FALSE;
-                break;
-            }
-        }
-    }
-    RImplementation.BasicStats.WaitS.End();
-    q_sync_count = (q_sync_count + 1) % HW.Caps.iGPUNum;\
-    CHK_DX(EndQuery(q_sync_point[q_sync_count]));
-
     //******* Main calc - DEFERRER RENDERER
     // Main calc
     RImplementation.BasicStats.Culling.Begin();

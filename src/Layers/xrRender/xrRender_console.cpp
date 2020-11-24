@@ -172,7 +172,6 @@ Flags32 ps_r2_ls_flags_ext = {
     /*R2FLAGEXT_SSAO_OPT_DATA |*/ R2FLAGEXT_SSAO_HALF_DATA | R2FLAGEXT_ENABLE_TESSELLATION};
 
 BOOL ps_clear_models_on_unload = 0; // Alundaio
-BOOL ps_no_scale_on_fade = 0; // Alundaio
 BOOL ps_use_precompiled_shaders = 0; // Alundaio
 BOOL ps_grass_shadow = 0; // Alundaio
 
@@ -975,7 +974,6 @@ void xrRender_initconsole()
     CMD4(CCC_Integer, "r__clear_models_on_unload", &ps_clear_models_on_unload, 0, 1); // Alundaio
     CMD4(CCC_Integer, "r__use_precompiled_shaders", &ps_use_precompiled_shaders, 0, 1); // Alundaio
     CMD4(CCC_Integer, "r__enable_grass_shadow", &ps_grass_shadow, 0, 1); // Alundaio
-    CMD4(CCC_Integer, "r__no_scale_on_fade", &ps_no_scale_on_fade, 0, 1); // Alundaio
 
 //  Allow real-time fog config reload
 #if (RENDER == R_R3) || (RENDER == R_R4)
