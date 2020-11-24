@@ -184,7 +184,6 @@ void CInventoryOwner::save(NET_Packet& output_packet)
         output_packet.w_u8((u8)inventory().GetActiveSlot());
 
     CharacterInfo().save(output_packet);
-    save_data(m_game_name, output_packet);
     save_data(m_money, output_packet);
 }
 void CInventoryOwner::load(IReader& input_packet)
@@ -198,7 +197,6 @@ void CInventoryOwner::load(IReader& input_packet)
     m_tmp_active_slot_num = active_slot;
 
     CharacterInfo().load(input_packet);
-    load_data(m_game_name, input_packet);
     load_data(m_money, input_packet);
 }
 
