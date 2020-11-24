@@ -26,9 +26,6 @@
 [submodule "Externals/jpeg"]
 	path = Externals/jpeg
 	url = https://github.com/OpenXRay/libjpeg.git
-[submodule "Externals/BugTrap"]
-	path = Externals/BugTrap
-	url = https://github.com/Xottab-DUTY/BugTrap.git
 [submodule "Externals/cryptopp"]
 	path = Externals/cryptopp
 	url = https://github.com/weidai11/cryptopp.git
@@ -44,7 +41,3 @@
 [submodule "Externals/gli"]
 	path = Externals/gli
 	url = https://github.com/g-truc/gli.git
-[submodule "res/gamedata"]
-	path = res/gamedata
-	url = https://qweasdd136963@bitbucket.org/qweasdd136963/call-of-chernobyl.git
-	branch = qw_br
