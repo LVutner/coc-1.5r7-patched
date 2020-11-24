@@ -1,7 +1,11 @@
 #include "stdafx.h"
 #include "string_concatenations.h"
 
-#if defined(LINUX) || defined(FREEBSD)
+#if defined(LINUX)
+#define EXCEPTION_STACK_OVERFLOW	((DWORD) 0xC00000FD)
+#define EXCEPTION_EXECUTE_HANDLER	1
+#define EXCEPTION_CONTINUE_SEARCH	0
+
 int _cdecl _resetstkoflw(void)
 {
     int stack_addr;
@@ -10,7 +14,11 @@ int _cdecl _resetstkoflw(void)
 }
 #endif
 
-namespace Strconcat
+namespace xray
+{
+namespace core
+{
+namespace detail
 {
 namespace strconcat_error
 {
@@ -74,20 +82,22 @@ int stack_overflow_exception_filter(int exception_code)
 
 void check_stack_overflow(u32 stack_increment)
 {
+#if defined(WINDOWS)
     __try
     {
         void* p = _alloca(stack_increment);
         p;
     }
-    __except (Strconcat::stack_overflow_exception_filter(GetExceptionCode()))
+    __except (xray::core::detail::stack_overflow_exception_filter(GetExceptionCode()))
     {
         _resetstkoflw();
     }
+#endif
 }
 
-void CStringTupples::error_process() const
+void string_tupples::error_process() const
 {
-    pcstr strings[MAX_ITEM_COUNT];
+    LPCSTR strings[6];
 
     u32 part_size = 0;
     u32 overrun_string_index = (u32)-1;
@@ -98,14 +108,217 @@ void CStringTupples::error_process() const
         if (overrun_string_index == (u32)-1)
         {
             part_size += m_strings[i].second;
-            if (part_size > MAX_CONCAT_RESULT_SIZE)
+            if (part_size > max_concat_result_size)
             {
                 overrun_string_index = i;
             }
         }
     }
+    VERIFY(overrun_string_index != -1);
 
     strconcat_error::process(overrun_string_index, m_count, strings);
 }
 
-} // namespace Strconcat
+} // namespace detail
+
+} // namespace core
+
+} // namespace xray
+
+using namespace xray::core::detail;
+
+// dest = S1+S2
+pstr strconcat(int dest_sz, pstr dest, pcstr S1, pcstr S2)
+{
+    VERIFY(dest);
+    VERIFY(S1);
+    VERIFY(S2);
+
+    pcstr strings[] = {S1, S2};
+
+    pstr i = dest;
+    pcstr e = dest + dest_sz;
+    pcstr j;
+    for (j = S1; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 0, strings);
+
+    for (j = S2; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 1, strings);
+
+    *i = 0;
+
+    return (dest);
+}
+
+// dest = S1+S2+S3
+pstr strconcat(int dest_sz, pstr dest, pcstr S1, pcstr S2, pcstr S3)
+{
+    VERIFY(dest);
+    VERIFY(S1);
+    VERIFY(S2);
+    VERIFY(S3);
+
+    pcstr strings[] = {S1, S2, S3};
+
+    pstr i = dest;
+    pcstr e = dest + dest_sz;
+    pcstr j;
+    for (j = S1; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 0, strings);
+
+    for (j = S2; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 1, strings);
+
+    for (j = S3; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 2, strings);
+
+    *i = 0;
+
+    return (dest);
+}
+
+// dest = S1+S2+S3+S4
+pstr strconcat(int dest_sz, pstr dest, pcstr S1, pcstr S2, pcstr S3, pcstr S4)
+{
+    VERIFY(dest);
+    VERIFY(S1);
+    VERIFY(S2);
+    VERIFY(S3);
+    VERIFY(S4);
+
+    pcstr strings[] = {S1, S2, S3, S4};
+
+    pstr i = dest;
+    pcstr e = dest + dest_sz;
+    pcstr j;
+    for (j = S1; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 0, strings);
+
+    for (j = S2; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 1, strings);
+
+    for (j = S3; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 2, strings);
+
+    for (j = S4; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 3, strings);
+
+    *i = 0;
+
+    return (dest);
+}
+
+// dest = S1+S2+S3+S4+S5
+pstr strconcat(int dest_sz, pstr dest, pcstr S1, pcstr S2, pcstr S3, pcstr S4, pcstr S5)
+{
+    VERIFY(dest);
+    VERIFY(S1);
+    VERIFY(S2);
+    VERIFY(S3);
+    VERIFY(S4);
+    VERIFY(S5);
+
+    pcstr strings[] = {S1, S2, S3, S4, S5};
+
+    pstr i = dest;
+    pcstr e = dest + dest_sz;
+    pcstr j;
+    for (j = S1; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 0, strings);
+
+    for (j = S2; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 1, strings);
+
+    for (j = S3; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 2, strings);
+
+    for (j = S4; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 3, strings);
+
+    for (j = S5; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 4, strings);
+
+    *i = 0;
+
+    return (dest);
+}
+
+// dest = S1+S2+S3+S4+S5+S6
+pstr strconcat(int dest_sz, pstr dest, pcstr S1, pcstr S2, pcstr S3, pcstr S4, pcstr S5,
+    pcstr S6)
+{
+    VERIFY(dest);
+    VERIFY(S1);
+    VERIFY(S2);
+    VERIFY(S3);
+    VERIFY(S4);
+    VERIFY(S5);
+    VERIFY(S6);
+
+    pcstr strings[] = {S1, S2, S3, S4, S5, S6};
+
+    pstr i = dest;
+    pcstr e = dest + dest_sz;
+    pcstr j;
+    for (j = S1; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 0, strings);
+
+    for (j = S2; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 1, strings);
+
+    for (j = S3; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 2, strings);
+
+    for (j = S4; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 3, strings);
+
+    for (j = S5; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 4, strings);
+
+    for (j = S6; *j && i < e; ++i, ++j)
+        *i = *j;
+
+    strconcat_error::process(i, e, 5, strings);
+
+    *i = 0;
+
+    return (dest);
+}
