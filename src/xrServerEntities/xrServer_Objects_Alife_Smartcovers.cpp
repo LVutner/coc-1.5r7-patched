@@ -114,7 +114,11 @@ void CSE_SmartCover::STATE_Read(NET_Packet& tNetPacket, u16 size)
 
     if (m_wVersion >= 128)
         m_can_fire = tNetPacket.r_u8();
-}
+	else
+    {
+        m_can_fire = m_is_combat_cover;
+    }
+ }
 
 void CSE_SmartCover::STATE_Write(NET_Packet& tNetPacket)
 {
@@ -295,15 +299,14 @@ void CSE_SmartCover::fill_visuals()
         if (!I->is_enterable)
             return;
 
-        CSE_Visual* visual = new CSE_SmartVisual();
-        visual->set_visual("actors\\stalker_neutral\\stalker_neutral_1");
-
         if (I->animation_id.size() == 0)
         {
             Msg("cover [%s] doesn't have idle_2_fire animation", I->string_identifier.c_str());
             return;
         }
 
+        CSE_Visual* visual = new CSE_SmartVisual();
+        visual->set_visual("actors\\stalker_neutral\\stalker_neutral_1");
         visual->startup_animation = I->animation_id;
 
         visual_data tmp;

@@ -21,7 +21,7 @@ IC const xr_vector<u32>& CSpaceRestrictionAbstract::border()
 
     THROW(initialized());
 #ifdef DEBUG
-    THROW3(!m_border.empty(), "Space restrictor has no border!", *name());
+    VERIFY3(!m_border.empty(), "Space restrictor has no border!", *name());
 #endif
     return (m_border);
 }
