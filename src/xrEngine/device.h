@@ -155,7 +155,7 @@ public:
 
 private:
     // Main objects used for creating and rendering the 3D scene
-    u32 m_dwWindowStyle;
+    u64 m_dwWindowStyle;
     CTimer TimerMM;
     RenderDeviceStatictics stats;
 
@@ -163,7 +163,7 @@ private:
 
 public:
     // HWND m_hWnd;
-    LRESULT MsgProc(HWND, UINT, WPARAM, LPARAM);
+    //LRESULT MsgProc(HWND, UINT, WPARAM, LPARAM);
 
     // u32 dwFrame;
     // u32 dwPrecacheFrame;
