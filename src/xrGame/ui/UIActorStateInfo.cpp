@@ -224,6 +224,7 @@ void ui_actor_state_wnd::UpdateActorInfo(CInventoryOwner* owner)
     }
     // wound protection progress bar
     {
+        woun_value += actor->GetProtection_ArtefactsOnBelt(ALife::eHitTypeWound);
         float max_power = actor->conditions().GetMaxWoundProtection();
 
         xr_sprintf(buf, sizeof(buf), "%s: %2.2f/%2.2f", *m_state[stt_wound]->m_hint_description_base, woun_value, max_power);
@@ -243,6 +244,7 @@ void ui_actor_state_wnd::UpdateActorInfo(CInventoryOwner* owner)
     }
     // fire wound protection progress bar
     {
+        fwou_value += actor->GetProtection_ArtefactsOnBelt(ALife::eHitTypeFireWound);
         float max_power = actor->conditions().GetMaxFireWoundProtection();
 
         xr_sprintf(buf, sizeof(buf), "%s: %2.2f/%2.2f", *m_state[stt_fire_wound]->m_hint_description_base, fwou_value, max_power);
