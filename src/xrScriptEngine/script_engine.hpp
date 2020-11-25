@@ -87,6 +87,8 @@ private:
     char* scriptBuffer = nullptr;
     size_t scriptBufferSize = 0;
     bool m_is_editor;
+	//Debrovski
+	shared_str (*m_userdataObjectLoggerFunc) (const luabind::detail::object_rep* objectToLog);
 
 protected:
     CScriptProcessStorage m_script_processes;
@@ -200,6 +202,7 @@ public:
     // This function is called from CScriptThread destructor
     void DestroyScriptThread(const CScriptThread* thread);
     bool is_editor();
+	void SetUserdataObjectLoggerFunc(decltype(m_userdataObjectLoggerFunc));
 };
 
 template <typename TResult>
