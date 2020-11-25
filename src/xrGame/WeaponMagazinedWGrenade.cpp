@@ -97,24 +97,21 @@ BOOL CWeaponMagazinedWGrenade::net_Spawn(CSE_Abstract* DC)
     UpdateGrenadeVisibility(m_bGrenadeMode && !!m_ammoElapsed.type2 ? true : false);
     SetPending(FALSE);
 
-    if (!IsGameTypeSingle())
+    if (m_bGrenadeMode && IsGrenadeLauncherAttached())
     {
-        if (m_bGrenadeMode && IsGrenadeLauncherAttached())
-        {
-        std::swap(iMagazineSize, iMagazineSize2);
+		std::swap(iMagazineSize, iMagazineSize2);
 		u8 old = m_ammoType.type1;
 		m_ammoType.type1 = m_ammoType.type2;
 		m_ammoType.type2 = old;
 		m_ammoTypes.swap(m_ammoTypes2);
-        std::swap(m_DefaultCartridge, m_DefaultCartridge2);
+		std::swap(m_DefaultCartridge, m_DefaultCartridge2);
 		m_magazine.swap(m_magazine2);
 		m_ammoElapsed.type1 = (u16)m_magazine.size();
 		m_ammoElapsed.type2 = (u16)m_magazine2.size();
-        }
+    }
 	else //In the case of config change or upgrade that removes GL
-        {
-		m_bGrenadeMode = false;
-        }
+    {
+	    m_bGrenadeMode = false;
     }
     return l_res;
 }
