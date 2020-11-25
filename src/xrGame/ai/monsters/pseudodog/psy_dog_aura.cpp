@@ -54,9 +54,6 @@ void CPsyDogAura::reinit()
 {
     m_time_actor_saw_phantom = 0;
     m_time_phantom_saw_actor = 0;
-
-    m_actor = smart_cast<CActor*>(Level().CurrentEntity());
-    VERIFY(m_actor);
 }
 
 void CPsyDogAura::update_schedule()
@@ -67,14 +64,14 @@ void CPsyDogAura::update_schedule()
     m_time_phantom_saw_actor = 0;
 
     // check memory of actor and check memory of phantoms
-    CVisualMemoryManager::VISIBLES::const_iterator I = m_actor->memory().visual().objects().begin();
-    CVisualMemoryManager::VISIBLES::const_iterator E = m_actor->memory().visual().objects().end();
+    CVisualMemoryManager::VISIBLES::const_iterator I = g_actor->memory().visual().objects().begin();
+    CVisualMemoryManager::VISIBLES::const_iterator E = g_actor->memory().visual().objects().end();
     for (; I != E; ++I)
     {
         const CGameObject* obj = (*I).m_object;
         if (smart_cast<const CPsyDogPhantom*>(obj))
         {
-            if (m_actor->memory().visual().visible_now(obj))
+            if (g_actor->memory().visual().visible_now(obj))
                 m_time_actor_saw_phantom = time();
         }
     }
@@ -83,7 +80,7 @@ void CPsyDogAura::update_schedule()
     xr_vector<CPsyDogPhantom*>::iterator it = m_object->m_storage.begin();
     for (; it != m_object->m_storage.end(); ++it)
     {
-        if ((*it)->EnemyMan.get_enemy() == m_actor)
+        if ((*it)->EnemyMan.get_enemy() == g_actor)
             m_time_phantom_saw_actor = time();
         else
         {
@@ -91,7 +88,7 @@ void CPsyDogAura::update_schedule()
             ENEMIES_MAP::const_iterator E = (*it)->EnemyMemory.get_memory().end();
             for (; I != E; ++I)
             {
-                if (I->first == m_actor)
+                if (I->first == g_actor)
                 {
                     m_time_phantom_saw_actor = _max(m_time_phantom_saw_actor, I->second.time);
                 }
@@ -102,7 +99,7 @@ void CPsyDogAura::update_schedule()
             break;
     }
 
-    bool const close_to_actor = m_actor ? m_object->Position().distance_to(m_actor->Position()) < 30 : false;
+    bool const close_to_actor = g_actor ? m_object->Position().distance_to(g_actor->Position()) < 30 : false;
     bool const need_be_active =
         ((m_time_actor_saw_phantom + 2000 > time()) || (m_time_phantom_saw_actor + 10000 > time())) && close_to_actor;
     if (active())
