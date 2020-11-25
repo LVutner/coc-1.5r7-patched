@@ -13,6 +13,7 @@
 #include "Level.h"
 #include "gameobject.h"
 #include "script_game_object.h"
+#include "alife_object_registry.h"
 
 CClientSpawnManager::~CClientSpawnManager() { VERIFY(m_registry.empty()); }
 void CClientSpawnManager::add(ALife::_OBJECT_ID requesting_id, ALife::_OBJECT_ID requested_id,
@@ -74,8 +75,8 @@ void CClientSpawnManager::remove(
     REQUESTED_REGISTRY::iterator I = registry.find(requested_id);
     if (I == registry.end())
     {
-        GEnv.ScriptEngine->script_log(LuaMessageType::Error,
-            "There is no spawn callback on object with id %d from object with id %d!", requesting_id, requested_id);
+        const auto* requestedObject  = g_ai_space->alife().objects().object(requested_id);
+        Msg("! There is no spawn callback on object id [%d] from object [%d][%s]", requesting_id, requested_id, requestedObject ? requestedObject->name_replace() : "none");
         return;
     }
 
@@ -87,8 +88,9 @@ void CClientSpawnManager::remove(ALife::_OBJECT_ID requesting_id, ALife::_OBJECT
     REQUEST_REGISTRY::iterator I = m_registry.find(requesting_id);
     if (I == m_registry.end())
     {
-        GEnv.ScriptEngine->script_log(LuaMessageType::Error,
-            "There is no spawn callback on object with id %d from object with id %d!", requesting_id, requested_id);
+
+        const auto* requestedObject = g_ai_space->alife().objects().object(requested_id);
+        Msg("! There is no spawn callback on object id [%d] from object [%d][%s]", requesting_id, requested_id, requestedObject ? requestedObject->name_replace() : "none");
         return;
     }
 
