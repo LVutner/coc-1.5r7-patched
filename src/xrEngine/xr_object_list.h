@@ -38,8 +38,12 @@ private:
     Objects destroy_queue;
     Objects objects_active;
     Objects objects_sleeping;
-    Objects m_crows[2];
     u32 m_owner_thread_id;
+    /**
+     * @brief m_primary_crows   - list of items of the primary thread
+     * @brief m_secondary_crows - list of items of the secondary thread
+     */
+    Objects m_primary_crows, m_secondary_crows;
     ObjectUpdateStatistics stats;
     u32 statsFrame;
 
@@ -50,7 +54,7 @@ public:
         int* m_ID;
         RELCASE_CALLBACK m_Callback;
         SRelcasePair(int* id, RELCASE_CALLBACK cb) : m_ID(id), m_Callback(cb) {}
-        bool operator==(RELCASE_CALLBACK cb) { return m_Callback == cb; }
+        bool operator==(const RELCASE_CALLBACK& cb) const { return m_Callback == cb; }
     };
     typedef xr_vector<SRelcasePair> RELCASE_CALLBACK_VEC;
     RELCASE_CALLBACK_VEC m_relcase_callbacks;
@@ -70,13 +74,13 @@ public:
     ~CObjectList();
 
     IGameObject* FindObjectByName(shared_str name);
-    IGameObject* FindObjectByName(LPCSTR name);
+    IGameObject* FindObjectByName(pcstr name);
     IGameObject* FindObjectByCLS_ID(CLASS_ID cls);
 
     void Load();
     void Unload();
 
-    IGameObject* Create(LPCSTR name);
+    IGameObject* Create(pcstr name);
     void Destroy(IGameObject* O);
 
 private:
@@ -108,12 +112,8 @@ public:
     {
         if (_it < objects_active.size())
             return objects_active[_it];
-
-        _it = _it - objects_active.size();
-        if (_it < objects_sleeping.size())
-            return objects_sleeping[_it];
-
-        return nullptr;
+        else
+            return objects_sleeping[_it - objects_active.size()];
     }
     bool dump_all_objects();
 
@@ -127,13 +127,13 @@ private:
     IC Objects& get_crows()
     {
         if (ThreadUtil::GetCurrThreadId() == m_owner_thread_id)
-            return (m_crows[0]);
+            return (m_primary_crows);
 
-        return (m_crows[1]);
+        return (m_secondary_crows);
     }
 
     static void clear_crow_vec(Objects& o);
-    static void dump_list(Objects& v, LPCSTR reason);
+    static void dump_list(Objects& v, pcstr reason);
 };
 
 #endif //__XR_OBJECT_LIST_H__

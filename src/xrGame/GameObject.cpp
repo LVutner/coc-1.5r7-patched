@@ -292,7 +292,7 @@ void CGameObject::net_Destroy()
     if (register_schedule())
         shedule_unregister();
     spatial_unregister();
-    // setDestroy (true); // commented in original src
+    //setDestroy (true); // commented in original src1
     // remove visual
     cNameVisual_set(0);
     // ~
@@ -1170,8 +1170,7 @@ void CGameObject::shedule_Update(u32 dt)
     else if (Device.vCameraPosition.distance_to_sqr(Position()) < CROW_RADIUS*CROW_RADIUS) MakeMeCrow ();
     */
     // ~
-    if (!GEnv.isDedicatedServer)
-        scriptBinder.shedule_Update(dt);
+    scriptBinder.shedule_Update(dt);
 }
 
 BOOL CGameObject::net_SaveRelevant() { return scriptBinder.net_SaveRelevant(); }
