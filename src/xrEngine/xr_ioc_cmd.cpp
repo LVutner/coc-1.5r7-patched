@@ -17,6 +17,16 @@
 ENGINE_API xr_vector<xr_token> AvailableVideoModes;
 xr_vector<xr_token> vid_quality_token;
 
+const xr_token FpsLockToken[] = {
+	{ "r_no_fps_lock",  0 },
+	{ "r_fps_lock_30",  30 },
+	{ "r_fps_lock_60",  60 },
+	{ "r_fps_lock_120", 120 },
+	{ "r_fps_lock_144", 144 },
+	{ "r_fps_lock_240", 240 },
+	{ nullptr, 0 }
+};
+
 const xr_token vid_bpp_token[] = {{"16", 16}, {"32", 32}, {0, 0}};
 
 void IConsole_Command::InvalidSyntax()
@@ -637,6 +647,10 @@ extern int ps_rs_loading_stages;
 ENGINE_API int ps_always_active = 0;
 
 ENGINE_API int ps_r__Supersample = 1;
+
+int sheduler_smoother_max_per_time      = 10;
+int sheduler_smoother_frame_size        = 100;
+
 void CCC_Register()
 {
     // General
@@ -676,6 +690,8 @@ void CCC_Register()
 	CMD3(CCC_Mask, "mt_physics", &psDeviceFlags, mtPhysics);
 	CMD3(CCC_Mask, "mt_network", &psDeviceFlags, mtNetwork);
 
+	CMD3(CCC_Token, "r_fps_lock", &g_dwFPSlimit, FpsLockToken);
+	
     // Render device states
     CMD4(CCC_Integer, "r__supersample", &ps_r__Supersample, 1, 4);
 
@@ -719,8 +735,8 @@ void CCC_Register()
     CMD1(CCC_SND_Restart, "snd_restart");
     CMD3(CCC_Mask, "snd_acceleration", &psSoundFlags, ss_Hardware);
     CMD3(CCC_Mask, "snd_efx", &psSoundFlags, ss_EAX);
-    CMD4(CCC_Integer, "snd_targets", &psSoundTargets, 4, 32);
-    CMD4(CCC_Integer, "snd_cache_size", &psSoundCacheSizeMB, 4, 64);
+    CMD4(CCC_Integer, "snd_targets", &psSoundTargets, 128, 256);
+    CMD4(CCC_Integer, "snd_cache_size", &psSoundCacheSizeMB, 32, 64);
 
 #ifdef DEBUG
     CMD3(CCC_Mask, "snd_stats", &g_stats_flags, st_sound);
@@ -757,6 +773,8 @@ void CCC_Register()
     extern int g_Dump_Import_Obj;
     CMD4(CCC_Integer, "net_dbg_dump_export_obj", &g_Dump_Export_Obj, 0, 1);
     CMD4(CCC_Integer, "net_dbg_dump_import_obj", &g_Dump_Import_Obj, 0, 1);
+	CMD4(CCC_Integer, "sheduler_smoother_max_per_time", &sheduler_smoother_max_per_time, 1, 100);
+	CMD4(CCC_Integer, "sheduler_smoother_frame", &sheduler_smoother_frame_size, 1, 100);
 
 #ifdef DEBUG
     CMD1(CCC_DumpOpenFiles, "dump_open_files");
