@@ -11,10 +11,11 @@
 
 using namespace luabind;
 using namespace luabind::policy;
+PCSTR fVectorLuaBindName = "vector";
 
 SCRIPT_EXPORT(Fvector, (), {
     module(luaState)
-        [class_<Fvector>("vector")
+        [class_<Fvector>(fVectorLuaBindName)
                 .def_readwrite("x", &Fvector::x)
                 .def_readwrite("y", &Fvector::y)
                 .def_readwrite("z", &Fvector::z)
