@@ -63,9 +63,6 @@ void CBaseMonster::feel_sound_new(
         return;
     }
 
-    if ((eType & SOUND_TYPE_WEAPON_SHOOTING) == SOUND_TYPE_WEAPON_SHOOTING)
-        power = 1.f;
-
     if (((eType & SOUND_TYPE_WEAPON_BULLET_HIT) == SOUND_TYPE_WEAPON_BULLET_HIT) && (dist < 2.f))
         HitMemory.add_hit(who, eSideFront);
 
