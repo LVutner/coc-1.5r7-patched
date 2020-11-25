@@ -35,7 +35,7 @@ ENGINE_API BOOL g_bRendering = FALSE;
 
 BOOL g_bLoaded = FALSE;
 ref_light precache_light = 0;
-int g_dwFPSlimit = 121;
+u32 g_dwFPSlimit = 60;
 
 BOOL CRenderDevice::Begin()
 {
@@ -225,17 +225,7 @@ void CRenderDevice::on_idle()
         return;
     }
 
-    // FPS Lock
-    if (g_dwFPSlimit > 0)
-    {
-        static DWORD dwLastFrameTime = 0;
-        DWORD dwCurrentTime = timeGetTime();
-
-        if ((dwCurrentTime - dwLastFrameTime) < (1000 / g_dwFPSlimit))
-            return;
-
-        dwLastFrameTime = dwCurrentTime;
-    }
+	const auto FrameStartTime = std::chrono::high_resolution_clock::now();
 
     if (psDeviceFlags.test(rsStatistic))
         g_bEnableStatGather = TRUE; // XXX: why not use either rsStatistic or g_bEnableStatGather?
@@ -249,11 +239,6 @@ void CRenderDevice::on_idle()
         pApp->LoadDraw();
         return;
     }
-
-    const auto frameStartTime = TimerGlobal.GetElapsed_ms();
-
-    if (!Device.dwPrecacheFrame && !g_SASH.IsBenchmarkRunning() && g_bLoaded)
-        g_SASH.StartBenchmark();
 
     FrameMove();
 
@@ -284,24 +269,40 @@ void CRenderDevice::on_idle()
 
     //renderProcessFrame.Set(); // allow render thread to do its job
     syncProcessFrame.Set(); // allow secondary thread to do its job
-    
-    if (!GEnv.isDedicatedServer)
-    {
-        // all rendering is done here
-        CStatTimer renderTotalReal;
-        renderTotalReal.FrameStart();
-        renderTotalReal.Begin();
-        if (b_is_Active && Begin())
-        {
-            seqRender.Process();
-            CalcFrameStats();
-            Statistic->Show();
-            End(); // Present goes here
-        }
-        renderTotalReal.End();
-        renderTotalReal.FrameEnd();
-        stats.RenderTotal.accum = renderTotalReal.accum;
+
+	// all rendering is done here
+	CStatTimer renderTotalReal;
+	renderTotalReal.FrameStart();
+	renderTotalReal.Begin();
+	if (b_is_Active && Begin())
+		{
+		seqRender.Process();
+		CalcFrameStats();
+		Statistic->Show();
+		End(); // Present goes here
     }
+    renderTotalReal.End();
+    renderTotalReal.FrameEnd();
+    stats.RenderTotal.accum = renderTotalReal.accum;
+ 
+	bool b_main_menu_is_active = (g_pGamePersistent->m_pMainMenu && g_pGamePersistent->m_pMainMenu->IsActive());
+
+	const auto FrameEndTime = std::chrono::high_resolution_clock::now();
+	const std::chrono::duration<double, std::milli> FrameElapsedTime = FrameEndTime - FrameStartTime;
+
+	constexpr u32 menuFPSlimit{ 60 }, pauseFPSlimit{ 60 };
+	const u32 curFPSLimit = b_main_menu_is_active ? menuFPSlimit : Device.Paused() ? pauseFPSlimit : g_dwFPSlimit;
+	if (curFPSLimit > 0)
+	{
+		const std::chrono::duration<double, std::milli> FpsLimitMs{ std::floor(1000.f / (curFPSLimit + 1)) };
+		if (FrameElapsedTime < FpsLimitMs)
+		{
+			const auto TimeToSleep = FpsLimitMs - FrameElapsedTime;
+			//std::this_thread::sleep_until(FrameEndTime + TimeToSleep); // часто спит больше, чем надо. Скорее всего из-за округлений в большую сторону.
+			Sleep(iFloor(TimeToSleep.count()));
+			//Msg("~~[%s] waited [%f] ms", __FUNCTION__, TimeToSleep.count());
+		}
+	}
 	
     syncFrameDone.Wait(); // wait until secondary thread finish its job
     //renderFrameDone.Wait(); // wait until render thread finish its job
@@ -360,19 +361,7 @@ void CRenderDevice::Run()
     mt_bMustExit = FALSE;
     ThreadUtil::CreateThread(SecondaryThreadProc, "X-RAY Secondary thread", 0, this);
     //ThreadUtil::CreateThread(RenderThreadProc, "X-RAY Render thread", 0, this);
-    
-    // Load FPS Lock
-    if (Core.ParamFlags.test(Core.nofpslock))
-        g_dwFPSlimit = -1;
-    else if (Core.ParamFlags.test(Core.fpslock60))
-        g_dwFPSlimit = 61;
-    else if (Core.ParamFlags.test(Core.fpslock120))
-        g_dwFPSlimit = 121;
-    else if (Core.ParamFlags.test(Core.fpslock144))
-        g_dwFPSlimit = 145;
-    else if (Core.ParamFlags.test(Core.fpslock240))
-        g_dwFPSlimit = 241;
-    
+     
     // Message cycle
     seqAppStart.Process();
     GEnv.Render->ClearTarget();
