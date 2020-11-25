@@ -180,7 +180,7 @@ void ATTACK_ON_RUN_STATE::update_aim_side()
     CEntityAlive const* const enemy = m_attacking ? m_enemy_to_attack : this->object->EnemyMan.get_enemy();
 
     Fvector const self_dir = this->object->Direction();
-    Fvector const self_to_enemy = enemy->Position() - this->object->Position();
+    Fvector const self_to_enemy = this->object->EnemyMan.get_enemy_position() - this->object->Position();
 
     aim_side const new_attack_side = (self_dir.x * self_to_enemy.z - self_dir.z * self_to_enemy.x > 0) ? right : left;
 
