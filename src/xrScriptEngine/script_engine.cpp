@@ -72,29 +72,29 @@ static void* __cdecl luabind_allocator(void* context, const void* pointer, size_
 
 namespace
 {
-void LuaJITLogError(lua_State* ls, const char* msg)
-{
-    const char* info = nullptr;
-    if (!lua_isnil(ls, -1))
+    void LuaJITLogError(lua_State* ls, const char* msg)
     {
-        info = lua_tostring(ls, -1);
-        lua_pop(ls, 1);
+        const char* info = nullptr;
+        if (!lua_isnil(ls, -1))
+        {
+            info = lua_tostring(ls, -1);
+            lua_pop(ls, 1);
+        }
+        Msg("! LuaJIT: %s (%s)", msg, info ? info : "no info");
     }
-    Msg("! LuaJIT: %s (%s)", msg, info ? info : "no info");
-}
-// tries to execute 'jit'+command
-bool RunJITCommand(lua_State* ls, const char* command)
-{
-    string128 buf;
-    xr_strcpy(buf, "jit.");
-    xr_strcat(buf, command);
-    if (luaL_dostring(ls, buf))
+    // tries to execute 'jit'+command
+    bool RunJITCommand(lua_State* ls, const char* command)
     {
-        LuaJITLogError(ls, "Unrecognized command");
-        return false;
+        string128 buf;
+        xr_strcpy(buf, "jit.");
+        xr_strcat(buf, command);
+        if (luaL_dostring(ls, buf))
+        {
+            LuaJITLogError(ls, "Unrecognized command");
+            return false;
+        }
+        return true;
     }
-    return true;
-}
 }
 
 const char* const CScriptEngine::GlobalNamespace = SCRIPT_GLOBAL_NAMESPACE;
@@ -178,7 +178,7 @@ int CScriptEngine::vscript_log(LuaMessageType luaMessageType, LPCSTR caFormat, v
     Msg("%s", S2);
     xr_strcpy(S2, SS);
     S1 = S2 + xr_strlen(SS);
-    vsprintf(S1, caFormat, marker);
+//    vsprintf(S1, caFormat, marker);
     xr_strcat(S2, "\r\n");
     m_output.w(S2, xr_strlen(S2));
     return l_iResult;
@@ -194,53 +194,43 @@ void CScriptEngine::print_stack(lua_State* L)
 
     if (L == nullptr)
         L = lua();
-    
-    if (strstr(Core.Params, "-luadumpstate"))
+
+
+    Log("\nLua Stack");
+    lua_Debug l_tDebugInfo;
+    for (int i = 0; lua_getstack(L, i, &l_tDebugInfo); i++)
     {
-        Log("\nSCRIPT ERROR");
-        lua_Debug l_tDebugInfo;
-        for (int i = 0; lua_getstack(L, i, &l_tDebugInfo); i++)
+        lua_getinfo(L, "nSlu", &l_tDebugInfo);
+        if (!l_tDebugInfo.name)
+            Msg("%2d : [%s] %s(%d)", i, l_tDebugInfo.what, l_tDebugInfo.short_src, l_tDebugInfo.currentline);
+        else if (!xr_strcmp(l_tDebugInfo.what, "C"))
+            Msg("%2d : [C  ] %s", i, l_tDebugInfo.name);
+        else
         {
-            lua_getinfo(L, "nSlu", &l_tDebugInfo);
-            if (!l_tDebugInfo.name)
-                Msg("%2d : [%s] %s(%d)", i, l_tDebugInfo.what, l_tDebugInfo.short_src, l_tDebugInfo.currentline);
-            else if (!xr_strcmp(l_tDebugInfo.what, "C"))
-                Msg("%2d : [C  ] %s", i, l_tDebugInfo.name);
-            else
-            {
-                Msg("%2d : [%s] %s(%d) : %s", i, l_tDebugInfo.what, l_tDebugInfo.short_src,
-                    l_tDebugInfo.currentline, l_tDebugInfo.name);
-            }
-
-            // Giperion: verbose log
-            Log("Lua state dump locals: ");
-            pcstr name = nullptr;
-            int VarID = 1;
-            try
-            {
-                while ((name = lua_getlocal(L, &l_tDebugInfo, VarID++)) != nullptr)
-                {
-                    LogVariable(L, name, 1);
-
-                    lua_pop(L, 1); /* remove variable value */
-                }
-            }
-            catch (...)
-            {
-                Log("Can't dump lua state - Engine corrupted");
-            }
-            Log("End of Lua state dump.\n");
-            // -Giperion
+            Msg("%2d : [%s] %s(%d) : %s", i, l_tDebugInfo.what, l_tDebugInfo.short_src,
+                l_tDebugInfo.currentline, l_tDebugInfo.name);
         }
-    }
-    else
-    {
-        luaL_traceback(L, L, nullptr, 1); // add lua traceback to it
-        pcstr sErrorText = lua_tostring(L, -1); // get combined error text from lua stack
-        Log(sErrorText);
-        lua_pop(L, 1); // restore lua stack
-    }
 
+        // Giperion: verbose log
+        Log("Lua state dump locals: ");
+        pcstr name = nullptr;
+        int VarID = 1;
+        try
+        {
+            while ((name = lua_getlocal(L, &l_tDebugInfo, VarID++)) != nullptr)
+            {
+                LogVariable(L, name, 1);
+
+                lua_pop(L, 1); /* remove variable value */
+            }
+        }
+        catch (...)
+        {
+            Log("Can't dump lua state - Engine corrupted");
+        }
+        Log("End of Lua state dump.\n");
+        // -Giperion
+    }
     m_stack_is_ready = true;
     logReenterability = false;
 }
@@ -255,10 +245,11 @@ void CScriptEngine::LogTable(lua_State* luaState, pcstr S, int level)
     {
         char sname[256];
         char sFullName[256];
-        xr_sprintf(sname, "%s", lua_tostring(luaState, -2));
-        xr_sprintf(sFullName, "%s.%s", S, sname);
+        lua_pushvalue(luaState, -2); //Debrovski: we should push clone of the key on top of stack
+        xr_sprintf(sname, "%s", lua_tostring(luaState, -1)); //...and execute lua_tostring on this clone, not original key
+        xr_sprintf(sFullName, "%s.%s", S, sname);            //..coz executing lua_tostring on original key(if not string) confuses lua_next
+        lua_pop(luaState, 1);
         LogVariable(luaState, sFullName, level + 1);
-
         lua_pop(luaState, 1); /* removes `value'; keeps `key' for next iteration */
     }
 }
@@ -308,7 +299,6 @@ void CScriptEngine::LogVariable(lua_State* luaState, pcstr name, int level)
             LogTable(luaState, name, level + 1);
             return;
         }
-        xr_sprintf(value, "[...]");
         break;
     }
 
@@ -330,11 +320,14 @@ void CScriptEngine::LogVariable(lua_State* luaState, pcstr name, int level)
             break;
         }
 
+
+
         pcstr className = rep->name();
         if (className)
-		{
-			xr_sprintf(value, "'%s' -> %s", className, m_userdataObjectLoggerFunc(object).c_str());
-		}
+        {
+            xr_sprintf(value, "'%s' -> %s", className, m_userdataObjectLoggerFunc(object).c_str());
+        }
+
 
         break;
     }
@@ -603,9 +596,11 @@ struct raii_guard : private Noncopyable
     CScriptEngine* m_script_engine;
     int m_error_code;
     const char*& m_error_description;
+    bool m_breakIfError;
 
-    raii_guard(CScriptEngine* scriptEngine, int error_code, const char*& error_description)
-        : m_script_engine(scriptEngine), m_error_code(error_code), m_error_description(error_description)
+    raii_guard(CScriptEngine* scriptEngine, int error_code, const char*& error_description, bool breakIfError)
+        : m_script_engine(scriptEngine), m_error_code(error_code), m_error_description(error_description),
+          m_breakIfError(breakIfError)
     {}
 
     ~raii_guard()
@@ -623,7 +618,7 @@ struct raii_guard : private Noncopyable
             if (!m_error_code)
                 return; // Check "lua_pcall_failed" before changing this!
 
-            if (break_on_assert)
+            if (break_on_assert && m_breakIfError)
                 R_ASSERT2(!m_error_code, m_error_description);
             else
                 Msg("! SCRIPT ERROR: %s", m_error_description);
@@ -631,7 +626,7 @@ struct raii_guard : private Noncopyable
     }
 };
 
-bool CScriptEngine::print_output(lua_State* L, pcstr caScriptFileName, int errorCode, pcstr caErrorText)
+bool CScriptEngine::print_output(lua_State* L, pcstr caScriptFileName, int errorCode, pcstr caErrorText, bool breakIfError)
 {
     CScriptEngine* scriptEngine = GetInstance(L);
     VERIFY(scriptEngine);
@@ -639,7 +634,7 @@ bool CScriptEngine::print_output(lua_State* L, pcstr caScriptFileName, int error
         print_error(L, errorCode);
     scriptEngine->print_stack(L);
     pcstr S = "see call_stack for details!";
-    raii_guard guard(scriptEngine, errorCode, caErrorText ? caErrorText : S);
+    raii_guard guard(scriptEngine, errorCode, caErrorText ? caErrorText : S, breakIfError);
     if (!lua_isstring(L, -1))
         return false;
     S = lua_tostring(L, -1);
