@@ -79,8 +79,12 @@ struct check_pred
     {
         auto object_ = _it->m_object;
         CEntityAlive* EA = smart_cast<CEntityAlive*>(object_);
+		if (!EA || EA->getDestroy() || ! EA ->g_Alive())
+			_it->m_flags.set(flVisObjNotValid, TRUE);
+			return;
         Fvector opos = Fvector(object_->Position());
-        if (!EA->g_Alive() || (0 > opos.sub(apos).dotproduct(Device.vCameraDirection)))
+
+        if (0 > opos.sub(apos).dotproduct(Device.vCameraDirection))
             _it->m_flags.set(flVisObjNotValid, TRUE);
     };
 };
