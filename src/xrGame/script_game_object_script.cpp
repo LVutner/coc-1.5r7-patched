@@ -19,12 +19,14 @@ extern class_<CScriptGameObject>& script_register_game_object1(class_<CScriptGam
 extern class_<CScriptGameObject>& script_register_game_object2(class_<CScriptGameObject>&);
 extern class_<CScriptGameObject>& script_register_game_object_trader(class_<CScriptGameObject>&);
 
+PCSTR scriptGameObjectLuaBindName = "game_object";
+
 SCRIPT_EXPORT(CScriptGameObject, (), {
     // XXX nitrocaster: one can export enum like class, without defining dummy type
     class EnumCallbackType
     {
     };
-    class_<CScriptGameObject> instance("game_object");
+    class_<CScriptGameObject> instance(scriptGameObjectLuaBindName);
 
     module(
         luaState)[class_<CSightParams>("CSightParams")
