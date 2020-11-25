@@ -37,6 +37,8 @@ void CPolterTele::update_frame() { inherited::update_frame(); }
 void CPolterTele::update_schedule()
 {
     inherited::update_schedule();
+	if (!m_object->g_Alive() || m_object->get_actor_ignore())
+		return;
 
     Fvector const actor_pos = Actor()->Position();
     float const dist2actor = actor_pos.distance_to(m_object->Position());
@@ -275,7 +277,7 @@ struct SCollisionHitCallback : public ICollisionHitCallback
     {
         VERIFY(object);
     }
-    void call(IPhysicsShellHolder* obj, float min_cs, float max_cs, float& cs, float& hl, ICollisionDamageInfo* di)
+    void call(IPhysicsShellHolder* obj, float min_cs, float max_cs, float& cs, float& hl, ICollisionDamageInfo* di) override
     {
         if (cs > min_cs * 0.5f)
             hl = m_pmt_object_collision_damage;
