@@ -112,8 +112,8 @@ bool CLevel::Load_GameSpecific_After()
         }
 
         if (g_pGamePersistent->pEnvironment)
-            g_pGamePersistent->pEnvironment->Invalidate();
-
+			g_pGamePersistent->pEnvironment->Invalidate();
+		
         if (FS.exist(fn_game, "$level$", "level.fog_vol"))
         {
             IReader* F = FS.r_open(fn_game);

@@ -40,6 +40,7 @@
 #include "HUDManager.h"
 #include "raypick.h"
 #include "xrCDB/xr_collide_defs.h"
+#include "GamePersistent.h"
 
 using namespace luabind;
 using namespace luabind::policy;
@@ -130,6 +131,7 @@ void set_time_factor(const float time_factor)
         return;
 
     Level().Server->GetGameState()->SetGameTimeFactor(time_factor);
+	GamePersistent().Environment().SetGameTime( Level().GetEnvironmentGameDayTimeSec(), Level().game->GetEnvironmentGameTimeFactor() );
 }
 
 float get_time_factor() { return (Level().GetGameTimeFactor()); }
@@ -206,11 +208,6 @@ u32 vertex_in_direction(u32 level_vertex_id, Fvector direction, float max_distan
 
 Fvector vertex_position(u32 level_vertex_id)
 {
-    if (!ai().level_graph().valid_vertex_id(level_vertex_id))
-    {
-        GEnv.ScriptEngine->print_stack();
-        Msg("level.vertex_position | Invalid vertex id %d", level_vertex_id);
-    }
     return (ai().level_graph().vertex_position(level_vertex_id));
 }
 

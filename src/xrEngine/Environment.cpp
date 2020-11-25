@@ -122,29 +122,23 @@ CEnvironment::~CEnvironment()
     xr_delete(PerlinNoise1D);
     OnDeviceDestroy();
 
-    VERIFY(m_ambients_config);
     CInifile::Destroy(m_ambients_config);
-    m_ambients_config = 0;
+    m_ambients_config = nullptr;
 
-    VERIFY(m_sound_channels_config);
     CInifile::Destroy(m_sound_channels_config);
-    m_sound_channels_config = 0;
+    m_sound_channels_config = nullptr;
 
-    VERIFY(m_effects_config);
     CInifile::Destroy(m_effects_config);
-    m_effects_config = 0;
+    m_effects_config = nullptr;
 
-    VERIFY(m_suns_config);
     CInifile::Destroy(m_suns_config);
-    m_suns_config = 0;
+    m_suns_config = nullptr;
 
-    VERIFY(m_thunderbolt_collections_config);
     CInifile::Destroy(m_thunderbolt_collections_config);
-    m_thunderbolt_collections_config = 0;
+    m_thunderbolt_collections_config = nullptr;
 
-    VERIFY(m_thunderbolts_config);
     CInifile::Destroy(m_thunderbolts_config);
-    m_thunderbolts_config = 0;
+    m_thunderbolts_config = nullptr;
 
     destroy_mixer();
 }
@@ -159,8 +153,12 @@ void CEnvironment::Invalidate()
         eff_Rain->StopAmbient();
         eff_Rain->SetInvalidateState();
     }
-    if (eff_LensFlare)
-        eff_LensFlare->Invalidate();
+	if (eff_Rain)
+	{
+		eff_Rain->snd_Ambient.stop();
+		eff_Rain->InvalidateState();
+	}
+    if (eff_LensFlare) eff_LensFlare->Invalidate();
 }
 
 float CEnvironment::TimeDiff(float prev, float cur)
@@ -300,8 +298,7 @@ bool CEnvironment::SetWeatherFX(shared_str name)
         C1->exec_time = NormalizeTime(start_tm);
         for (auto t_it = CurrentWeather->begin() + 2; t_it != CurrentWeather->end() - 1; t_it++)
             (*t_it)->exec_time = NormalizeTime(start_tm + (*t_it)->exec_time_loaded);
-        SelectEnv(PrevWeather, WFX_end_desc[0], CE->exec_time);
-        SelectEnv(PrevWeather, WFX_end_desc[1], WFX_end_desc[0]->exec_time + 0.5f);
+        SelectEnvs( PrevWeather, WFX_end_desc[ 0 ], WFX_end_desc[ 1 ], CE->exec_time );
         CT->copy(*WFX_end_desc[0]);
         CT->exec_time = NormalizeTime(CE->exec_time + rewind_tm);
         wfx_time = TimeDiff(fGameTime, CT->exec_time);
@@ -313,9 +310,9 @@ bool CEnvironment::SetWeatherFX(shared_str name)
         Current[0] = C0;
         Current[1] = C1;
 #ifdef WEATHER_LOGGING
-        Msg("Starting WFX: '%s' - %3.2f sec", *name, wfx_time);
-// for (auto l_it=CurrentWeather->begin(); l_it!=CurrentWeather->end(); l_it++)
-// Msg (". Env: '%s' Tm: %3.2f",*(*l_it)->m_identifier.c_str(),(*l_it)->exec_time);
+		Msg( "Starting WFX: '%s' - %3.2f sec. GameTime: %3.2f", *name, wfx_time, fGameTime );
+		for (EnvIt l_it=CurrentWeather->begin(); l_it!=CurrentWeather->end(); l_it++)
+			Msg( ". Env: '%s' Tm: %3.2f", (*l_it)->m_identifier.c_str(), (*l_it)->exec_time );
 #endif
     }
     else
@@ -329,13 +326,18 @@ bool CEnvironment::SetWeatherFX(shared_str name)
 
 bool CEnvironment::StartWeatherFXFromTime(shared_str name, float time)
 {
-    if (!SetWeatherFX(name))
+    float _fGameTime = fGameTime;
+	fGameTime = NormalizeTime( fGameTime - time );
+	bool res  = SetWeatherFX( name );
+	fGameTime = _fGameTime;
+	if ( !res )
         return false;
-
-    for (auto it = CurrentWeather->begin(); it != CurrentWeather->end(); it++)
-        (*it)->exec_time = NormalizeTime((*it)->exec_time - wfx_time + time);
-
-    wfx_time = time;
+    wfx_time -= time;
+#ifdef WEATHER_LOGGING
+	Msg( "Started WFX from time[%3.2f]: '%s' - %3.2f sec", time, *name, wfx_time );
+	for ( EnvIt l_it = CurrentWeather->begin(); l_it != CurrentWeather->end(); l_it++ )
+		Msg( ". Env: '%s' Tm: %3.2f", (*l_it)->m_identifier.c_str(), (*l_it)->exec_time );
+#endif
     return true;
 }
 
