@@ -80,24 +80,26 @@ void CCoverManager::compute_static_cover()
     const CLevelGraph& graph = ai().level_graph();
     const u32 levelVertexCount = ai().level_graph().header().vertex_count();
 
-    FOR_START(u32, 0, levelVertexCount, i)
-        {
-            const CLevelGraph::CVertex& vertex = *graph.vertex(i);
-            if (vertex.high_cover(0) + vertex.high_cover(1) + vertex.high_cover(2) + vertex.high_cover(3))
-            {
-                m_temp[i] = edge_vertex(i);
-                continue;
-            }
+	tbb::parallel_for(tbb::blocked_range<u32>(0, levelVertexCount), [&](const tbb::blocked_range<u32>& range) {
+		for (u32 i = range.begin(); i != range.end(); ++i)
+			{
+				const CLevelGraph::CVertex& vertex = *graph.vertex(i);
+				if (vertex.high_cover(0) + vertex.high_cover(1) + vertex.high_cover(2) + vertex.high_cover(3))
+				{
+					m_temp[i] = edge_vertex(i);
+					continue;
+				}
 
-            if (vertex.low_cover(0) + vertex.low_cover(1) + vertex.low_cover(2) + vertex.low_cover(3))
-            {
-                m_temp[i] = edge_vertex(i);
-                continue;
-            }
+				if (vertex.low_cover(0) + vertex.low_cover(1) + vertex.low_cover(2) + vertex.low_cover(3))
+				{
+					m_temp[i] = edge_vertex(i);
+					continue;
+				}
 
-            m_temp[i] = false;
-        }
-    FOR_END
+				m_temp[i] = false;
+			}
+		}
+	);
 
     for (u32 i = 0; i < levelVertexCount; ++i)
         if (m_temp[i] && critical_cover(i))
