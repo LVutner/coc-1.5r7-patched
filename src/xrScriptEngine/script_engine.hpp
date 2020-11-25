@@ -87,6 +87,7 @@ private:
     char* scriptBuffer = nullptr;
     size_t scriptBufferSize = 0;
     bool m_is_editor;
+	
 	//Debrovski
 	shared_str (*m_userdataObjectLoggerFunc) (const luabind::detail::object_rep* objectToLog);
 
@@ -139,7 +140,7 @@ public:
     luabind::object name_space(LPCSTR namespace_name);
     int error_log(LPCSTR caFormat, ...);
     int script_log(LuaMessageType message, LPCSTR caFormat, ...);
-    static bool print_output(lua_State* L, pcstr caScriptName, int iErrorCode = 0, pcstr caErrorText = nullptr);
+    static bool print_output(lua_State* L, pcstr caScriptName, int iErrorCode = 0, pcstr caErrorText = nullptr, bool breakIfError = true/*MNP*/);
 
 private:
     static void print_error(lua_State* L, int iErrorCode);

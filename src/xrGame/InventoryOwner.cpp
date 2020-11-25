@@ -163,8 +163,6 @@ BOOL CInventoryOwner::net_Spawn(CSE_Abstract* DC)
 
     if (!pThis->Local())  return TRUE;
 
-    if (!pThis->Local()) return TRUE;
-
     return TRUE;
 }
 
@@ -184,6 +182,7 @@ void CInventoryOwner::save(NET_Packet& output_packet)
         output_packet.w_u8((u8)inventory().GetActiveSlot());
 
     CharacterInfo().save(output_packet);
+    //save_data(m_game_name, output_packet);
     save_data(m_money, output_packet);
 }
 void CInventoryOwner::load(IReader& input_packet)
@@ -197,6 +196,7 @@ void CInventoryOwner::load(IReader& input_packet)
     m_tmp_active_slot_num = active_slot;
 
     CharacterInfo().load(input_packet);
+    //load_data(m_game_name, input_packet);
     load_data(m_money, input_packet);
 }
 
@@ -358,7 +358,7 @@ void CInventoryOwner::spawn_supplies()
         Level().spawn_item(
             "bolt", game_object->Position(), game_object->ai_location().level_vertex_id(), game_object->ID());
 
-    if (!ai().get_alife() && IsGameTypeSingle())
+    if (!ai().get_alife())
     {
         CSE_Abstract* abstract = Level().spawn_item("device_pda", game_object->Position(),
             game_object->ai_location().level_vertex_id(), game_object->ID(), true);
