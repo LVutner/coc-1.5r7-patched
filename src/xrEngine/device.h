@@ -18,6 +18,8 @@
 #include "xrCore/fastdelegate.h"
 #include "xrCore/ModuleLookup.hpp"
 
+extern u32 g_dwFPSlimit;
+
 #define VIEWPORT_NEAR 0.1f
 
 #define DEVICE_RESET_PRECACHE_FRAME_COUNT 10
@@ -163,7 +165,7 @@ private:
 
 public:
     // HWND m_hWnd;
-    //LRESULT MsgProc(HWND, UINT, WPARAM, LPARAM);
+   // LRESULT MsgProc(HWND, UINT, WPARAM, LPARAM);
 
     // u32 dwFrame;
     // u32 dwPrecacheFrame;
