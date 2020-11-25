@@ -303,6 +303,7 @@ void CUIActorMenu::Construct()
     m_allowed_drops[iDeadBodyBag].push_back(iActorBelt);
     m_allowed_drops[iDeadBodyBag].push_back(iDeadBodyBag);
 
+	m_allowed_drops[iQuickSlot].push_back(iQuickSlot);
     m_allowed_drops[iQuickSlot].push_back(iActorBag);
     m_allowed_drops[iQuickSlot].push_back(iActorTrade);
 
