@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "control_animation_base.h"
 #include "control_direction_base.h"
 #include "control_movement_base.h"
@@ -11,6 +11,8 @@
 #include "monster_event_manager.h"
 #include "control_jump.h"
 #include "sound_player.h"
+#include "xrEngine/gamemtllib.h"
+#include "xrGame/actor.h"
 
 // DEBUG purpose only
 constexpr pcstr dbg_action_name_table[] = {"ACT_STAND_IDLE", "ACT_SIT_IDLE", "ACT_LIE_IDLE", "ACT_WALK_FWD", "ACT_WALK_BKWD",
@@ -603,6 +605,42 @@ void CControlAnimationBase::set_animation_speed()
     ctrl_data->set_speed(m_cur_anim.speed._get_target());
 }
 
+class ray_query_param
+{
+    public:
+        const CBaseMonster* m_holder;
+        const CEntityAlive* m_enemy;
+        bool m_can_hit_enemy;
+
+    IC ray_query_param( const CBaseMonster* holder, const CEntityAlive* enemy )
+    {
+        m_holder = holder;
+        m_enemy  = enemy;
+        m_can_hit_enemy = false;
+    }
+};
+
+ICF static BOOL check_hit_trace_callback( collide::rq_result& result, LPVOID params )
+{
+    ray_query_param* param = (ray_query_param*)params;
+    if ( result.O )
+    {
+        const CBaseMonster* monster      = smart_cast<const CBaseMonster*>( result.O );
+        const CEntityAlive* entity_alive = smart_cast<const CEntityAlive*>( result.O );
+        if ( monster == param->m_holder ) return TRUE;
+        else if ( entity_alive == param->m_enemy )
+           param->m_can_hit_enemy = true;
+    }
+    else
+    {
+        // получить треугольник и узнать его материал 
+        CDB::TRI* T = Level().ObjectSpace.GetStaticTris() + result.element;
+        if ( GMLib.GetMaterialByIdx( T->material) ->Flags.is( SGameMtl::flPassable ) )
+            return TRUE;
+    }
+    return FALSE;
+}
+
 void CControlAnimationBase::check_hit(MotionID motion, float time_perc)
 {
     if (!m_object->EnemyMan.get_enemy())
@@ -638,6 +676,22 @@ void CControlAnimationBase::check_hit(MotionID motion, float time_perc)
 
     if (!is_angle_between(p, from, to))
         should_hit = false;
+    
+    const CActor *pA = smart_cast<const CActor*>( enemy );
+    if ( should_hit && pA )
+    {
+        Fvector C, enemy_center;
+        m_object->Center( C );
+        enemy->Center( enemy_center );
+        Fvector dir;
+        dir.sub( enemy_center, C );
+        dir.normalize();
+        collide::rq_results RQR;
+        collide::ray_defs RD( C, dir, params.dist, CDB::OPT_CULL, collide::rqtBoth );
+        ray_query_param params( m_object, enemy );
+        Level().ObjectSpace.RayQuery( RQR, RD, check_hit_trace_callback, &params, NULL, m_object );
+            should_hit = params.m_can_hit_enemy;
+    }
 
     if (should_hit)
         m_object->HitEntity(enemy, params.hit_power, params.impulse, params.impulse_dir);
