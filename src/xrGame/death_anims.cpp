@@ -20,10 +20,16 @@ rnd_motion* rnd_motion::setup(IKinematicsAnimated* k, LPCSTR s)
         string64 n;
         _GetItem(s, i, n);
         MotionID m = k->LL_MotionID(n);
-        VERIFY2(m.valid(), make_string("motion: %s not found!", n));
-        motions.push_back(m);
-    }
-    return this;
+		if (m.valid())
+		{
+			motions.push_back(m);
+		}
+#ifdef DEBUG
+        else
+            msg("death_anims: motion: %s not found!", n);
+#endif
+     }
+     return this;
 }
 
 MotionID rnd_motion::motion() const
