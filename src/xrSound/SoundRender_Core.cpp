@@ -74,10 +74,7 @@ void CSoundRender_Core::_initialize()
 
     bReady = true;
 
-    if (strstr(Core.Params, "-prefetch_sounds"))
-    {
-        CreateAllSources();
-    }
+    CreateAllSources();
 }
 
 extern xr_vector<u8> g_target_temp_data;
