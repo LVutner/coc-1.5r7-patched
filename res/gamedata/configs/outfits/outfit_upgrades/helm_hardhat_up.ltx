@@ -1,0 +1,88 @@
+[up_sect_firsta_helm_hardhat]
+cost 		= 800
+value 		= +20
+
+telepatic_protection  			= 0.01
+
+[up_sect_secona_helm_hardhat]
+value		= 1
+cost 		= 2500
+
+nightvision_sect 				= effector_nightvision_1
+
+[up_sect_thirda_helm_hardhat_respirator]
+cost 		= 300
+value 		= +10
+
+chemical_burn_protection        = 0.008
+immunities_sect_add 			= sect_helm_chem_immunity_add
+
+[up_firsta_helm_hardhat]
+scheme_index            = 0, 0
+known                   = 1
+effects                 = 
+section                 = up_sect_firsta_helm_hardhat
+property                = prop_psy
+
+precondition_functor    = inventory_upgrades.precondition_functor_a
+precondition_parameter  = a & b
+
+effect_functor          = inventory_upgrades.effect_functor_a
+effect_parameter        = something_here
+
+prereq_functor          = inventory_upgrades.prereq_functor_a
+prereq_tooltip_functor  = inventory_upgrades.prereq_tooltip_functor_a
+prereq_params           =
+name                    = st_up_res_b1_name
+description             = st_up_res_b1_descr
+icon                    = ui_inGame2_upgrade_helm_hardhat_2
+
+[up_secona_helm_hardhat]
+scheme_index            = 0, 1
+known                   = 1
+effects                 =
+section                 = up_sect_secona_helm_hardhat
+property                = prop_night_vision
+
+precondition_functor    = inventory_upgrades.precondition_functor_a
+precondition_parameter  = a & b
+
+effect_functor          = inventory_upgrades.effect_functor_a
+effect_parameter        = something_here
+
+prereq_functor          = inventory_upgrades.prereq_functor_a
+prereq_tooltip_functor  = inventory_upgrades.prereq_tooltip_functor_a
+prereq_params           =
+name                    = st_up_resp_a1_name
+description             = st_up_resp_a1_descr
+icon                    = ui_inGame2_upgrade_helm_hardhat_4
+
+[up_thirda_helm_hardhat_respirator]
+scheme_index            = 0, 2
+known                   = 1
+effects                 = 
+section                 = up_sect_thirda_helm_hardhat_respirator
+property                = prop_chem
+
+precondition_functor    = inventory_upgrades.precondition_functor_a
+precondition_parameter  = a & b
+
+effect_functor          = inventory_upgrades.effect_functor_a
+effect_parameter        = something_here
+
+prereq_functor          = inventory_upgrades.prereq_functor_a
+prereq_tooltip_functor  = inventory_upgrades.prereq_tooltip_functor_a
+prereq_params           = 
+name                    = st_up_res_b2_name
+description             = st_up_res_b2_descr
+icon                    = ui_inGame2_upgrade_helm_respirator_2
+
+
+[up_gr_firstab_helm_hardhat]
+elements                = up_firsta_helm_hardhat
+
+[up_gr_seconab_helm_hardhat]
+elements                = up_secona_helm_hardhat
+
+[up_gr_thirdab_helm_hardhat_respirator]
+elements                = up_thirda_helm_hardhat_respirator
