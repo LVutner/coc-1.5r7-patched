@@ -187,7 +187,6 @@ public:
         CStatTimer Animation; // skeleton calculation
         CStatTimer Primitives; // actual primitive rendering
         CStatTimer Wait; // ...waiting something back (queries results, etc.)
-        CStatTimer WaitS; // ...frame-limit sync
         CStatTimer RenderTargets; // ...render-targets
         CStatTimer Skinning; // ...skinning
         CStatTimer DetailVisibility; // ...details visibility detection
@@ -213,7 +212,6 @@ public:
             Animation.FrameStart();
             Primitives.FrameStart();
             Wait.FrameStart();
-            WaitS.FrameStart();
             RenderTargets.FrameStart();
             Skinning.FrameStart();
             DetailVisibility.FrameStart();
@@ -240,7 +238,6 @@ public:
             Animation.FrameEnd();
             Primitives.FrameEnd();
             Wait.FrameEnd();
-            WaitS.FrameEnd();
             RenderTargets.FrameEnd();
             Skinning.FrameEnd();
             DetailVisibility.FrameEnd();

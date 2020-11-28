@@ -804,27 +804,29 @@ void CActor::SetCallbacks()
 {
     IKinematics* V = smart_cast<IKinematics*>(Visual());
     VERIFY(V);
-    u16 spine0_bone = V->LL_BoneID("bip01_spine");
-    u16 spine1_bone = V->LL_BoneID("bip01_spine1");
-    u16 shoulder_bone = V->LL_BoneID("bip01_spine2");
-    u16 head_bone = V->LL_BoneID("bip01_head");
-    V->LL_GetBoneInstance(u16(spine0_bone)).set_callback(bctCustom, Spin0Callback, this);
-    V->LL_GetBoneInstance(u16(spine1_bone)).set_callback(bctCustom, Spin1Callback, this);
-    V->LL_GetBoneInstance(u16(shoulder_bone)).set_callback(bctCustom, ShoulderCallback, this);
-    V->LL_GetBoneInstance(u16(head_bone)).set_callback(bctCustom, HeadCallback, this);
+    m_spine2 = smart_cast<IKinematics*>(Visual())->LL_BoneID("bip01_spine2");
+    m_spine1 = smart_cast<IKinematics*>(Visual())->LL_BoneID("bip01_spine1");
+    m_spine  = smart_cast<IKinematics*>(Visual())->LL_BoneID("bip01_spine");
+    m_head   = smart_cast<IKinematics*>(Visual())->LL_BoneID("bip01_head");
+
+    V->LL_GetBoneInstance(u16(m_spine1)).set_callback(bctCustom, Spin0Callback, this);
+    V->LL_GetBoneInstance(u16(m_spine2)).set_callback(bctCustom, Spin1Callback, this);
+    V->LL_GetBoneInstance(u16(m_spine)).set_callback(bctCustom, ShoulderCallback, this);
+    V->LL_GetBoneInstance(u16(m_head)).set_callback(bctCustom, HeadCallback, this);
 }
 void CActor::ResetCallbacks()
 {
     IKinematics* V = smart_cast<IKinematics*>(Visual());
     VERIFY(V);
-    u16 spine0_bone = V->LL_BoneID("bip01_spine");
-    u16 spine1_bone = V->LL_BoneID("bip01_spine1");
-    u16 shoulder_bone = V->LL_BoneID("bip01_spine2");
-    u16 head_bone = V->LL_BoneID("bip01_head");
-    V->LL_GetBoneInstance(u16(spine0_bone)).reset_callback();
-    V->LL_GetBoneInstance(u16(spine1_bone)).reset_callback();
-    V->LL_GetBoneInstance(u16(shoulder_bone)).reset_callback();
-    V->LL_GetBoneInstance(u16(head_bone)).reset_callback();
+    m_spine2 = smart_cast<IKinematics*>(Visual())->LL_BoneID("bip01_spine2");
+    m_spine1 = smart_cast<IKinematics*>(Visual())->LL_BoneID("bip01_spine1");
+    m_spine  = smart_cast<IKinematics*>(Visual())->LL_BoneID("bip01_spine");
+    m_head   = smart_cast<IKinematics*>(Visual())->LL_BoneID("bip01_head");
+
+    V->LL_GetBoneInstance(u16(m_spine)).reset_callback();
+    V->LL_GetBoneInstance(u16(m_spine1)).reset_callback();
+    V->LL_GetBoneInstance(u16(m_spine2)).reset_callback();
+    V->LL_GetBoneInstance(u16(m_head)).reset_callback();
 }
 
 void CActor::OnChangeVisual()

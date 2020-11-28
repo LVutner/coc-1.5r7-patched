@@ -136,21 +136,6 @@ void xrCore::initParamFlags()
     if (strstr(Params, "-dev"))
         ParamFlags.set(ParamFlag::dev, true);
 
-    if (strstr(Params, "-nofpslock"))
-        ParamFlags.set(ParamFlag::nofpslock, true);
-
-    if (strstr(Params, "-fpslock60"))
-        ParamFlags.set(ParamFlag::fpslock60, true);
-
-    if (strstr(Params, "-fpslock120"))
-        ParamFlags.set(ParamFlag::fpslock120, true);
-
-    if (strstr(Params, "-fpslock144"))
-        ParamFlags.set(ParamFlag::fpslock144, true);
-
-    if (strstr(Params, "-fpslock240"))
-        ParamFlags.set(ParamFlag::fpslock240, true);
-
     if (strstr(Params, "-genbump"))
         ParamFlags.set(ParamFlag::genbump, true);
 }

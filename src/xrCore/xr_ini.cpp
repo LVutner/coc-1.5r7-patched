@@ -706,6 +706,9 @@ CInifile::Sect& CInifile::r_section(pcstr S) const
 
 pcstr CInifile::r_string(pcstr S, pcstr L) const
 {
+    if (!S || !L || !strlen(S) || !strlen(L)) //--#SM+#-- [fix for one of "xrDebug - Invalid handler" error log]
+        Msg("!![ERROR] CInifile::r_string: S = [%s], L = [%s]", S, L);
+
     Sect const& I = r_section(S);
     auto A = std::lower_bound(I.Data.cbegin(), I.Data.cend(), L, item_pred);
 

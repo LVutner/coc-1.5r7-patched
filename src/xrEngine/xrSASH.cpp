@@ -476,6 +476,8 @@ void xrSASH::TryInitEngine(bool bNoRun)
         Console->Execute("renderer renderer_r2a");
     else if (strstr(Core.Params, "-r2"))
         Console->Execute("renderer renderer_r2");
+    else if (strstr(Core.Params, "-r1"))
+        Console->Execute("renderer renderer_r1");
     else
     {
         CCC_LoadCFG_custom* pTmp = new CCC_LoadCFG_custom("renderer ");
