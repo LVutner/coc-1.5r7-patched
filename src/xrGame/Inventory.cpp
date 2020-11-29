@@ -2,6 +2,7 @@
 #include "inventory.h"
 #include "actor.h"
 #include "CustomOutfit.h"
+#include "WeaponKnife.h"
 #include "trade.h"
 #include "weapon.h"
 
@@ -1136,6 +1137,13 @@ bool CInventory::CanPutInSlot(PIItem pIItem, u16 slot_id) const
     {
         CCustomOutfit* pOutfit = m_pOwner->GetOutfit();
         if (pOutfit && !pOutfit->bIsHelmetAvaliable)
+            return false;
+    }
+
+	if (slot_id == KNIFE_SLOT)
+    {
+		CWeaponKnife* pWeaponKnife = smart_cast<CWeaponKnife*>(pIItem);
+        if (!pWeaponKnife)
             return false;
     }
 

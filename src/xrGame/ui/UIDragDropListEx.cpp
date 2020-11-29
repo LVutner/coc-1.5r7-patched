@@ -413,7 +413,9 @@ void CUIDragDropListEx::SetItem(CUICellItem* itm, Ivector2 cell_pos) // start at
 {
     if (m_container->AddSimilar(itm))
         return;
-    R_ASSERT(m_container->IsRoomFree(cell_pos, itm->GetGridSize()));
+	
+    if (!(m_container->IsRoomFree(cell_pos, itm->GetGridSize())))
+		Msg("!![CUIDragDropListEx::SetItem] !(m_container->IsRoomFree(cell_pos, itm->GetGridSize()))");
 
     m_container->PlaceItemAtPos(itm, cell_pos);
 
@@ -657,7 +659,7 @@ Ivector2 CUICellContainer::FindFreeCell(const Ivector2& _size)
                 if (IsRoomFree(tmp, _size))
                     return tmp;
 
-        R_ASSERT2(0, "there are no free room to place item");
+        Msg("!![CUICellContainer::FindFreeCell] There are no free room to place item");
     }
     return tmp;
 }
@@ -738,7 +740,9 @@ Ivector2 CUICellContainer::TopVisibleCell()
 
 CUICell& CUICellContainer::GetCellAt(const Ivector2& pos)
 {
-    R_ASSERT(ValidCell(pos));
+	if (!(ValidCell(pos)))
+		Msg("!![CUICellContainer::GetCellAt] !(ValidCell(pos))");
+	
     CUICell& c = m_cells[m_cellsCapacity.x * pos.y + pos.x];
     return c;
 }
