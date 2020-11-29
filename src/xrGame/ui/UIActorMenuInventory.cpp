@@ -241,9 +241,10 @@ void CUIActorMenu::OnInventoryAction(PIItem pItem, u16 action_type)
     case GE_TRADE_BUY:
     case GE_OWNERSHIP_TAKE:
     {
+        u32 i = 0;
         bool b_already = false;
 
-        CUIDragDropListEx* lst_to_add = nullptr;
+        CUIDragDropListEx* lst_to_add = NULL;
         SInvItemPlace pl = pItem->m_ItemCurrPlace;
         if (pItem->BaseSlot() == GRENADE_SLOT)
         {
@@ -266,27 +267,38 @@ void CUIActorMenu::OnInventoryAction(PIItem pItem, u16 action_type)
                 lst_to_add = GetListByType(iDeadBodyBag);
         }
 
-        for (auto& curr : all_lists)
+        while (all_lists[i])
         {
-            if (!curr) // m_pLists[eInventoryHelmetList] can be nullptr
-                continue;
-            CUICellItem* ci = nullptr;
+            CUIDragDropListEx* curr = all_lists[i];
+            CUICellItem* ci = NULL;
 
             if (FindItemInList(curr, pItem, ci))
             {
                 if (lst_to_add != curr)
-                {
                     RemoveItemFromList(curr, pItem);
-                }
                 else
-                {
                     b_already = true;
+            }
+            ++i;
+        }
+
+        for (u8 i = 1; i <= m_slot_count; ++i)
+        {
+            CUIDragDropListEx* curr = m_pInvList[i];
+            if (curr)
+            {
+                CUICellItem* ci = nullptr;
+                if (FindItemInList(curr, pItem, ci))
+                {
+                    if (lst_to_add != curr)
+                        RemoveItemFromList(curr, pItem);
+                    else
+                        b_already = true;
                 }
-                // break;
             }
         }
 
-        CUICellItem* ci = nullptr;
+        CUICellItem* ci = NULL;
         if (GetMenuMode() == mmDeadBodySearch && FindItemInList(m_pDeadBodyBagList, pItem, ci))
             break;
 
@@ -298,7 +310,7 @@ void CUIActorMenu::OnInventoryAction(PIItem pItem, u16 action_type)
                 lst_to_add->SetItem(itm);
             }
         }
-        if (m_pActorInvOwner && m_pQuickSlot)
+        if (m_pActorInvOwner)
             m_pQuickSlot->ReloadReferences(m_pActorInvOwner);
     }
     break;
@@ -316,22 +328,31 @@ void CUIActorMenu::OnInventoryAction(PIItem pItem, u16 action_type)
             }
         }
 
-        for (auto& curr : all_lists)
+        u32 i = 0;
+        while (all_lists[i])
         {
-            if (!curr) // m_pLists[eInventoryHelmetList] can be nullptr
-                continue;
-
+            CUIDragDropListEx* curr = all_lists[i];
             if (RemoveItemFromList(curr, pItem))
             {
-#ifdef DEBUG
+#ifndef MASTER_GOLD
                 Msg("all ok. item [%d] removed from list", pItem->object_id());
-#endif
+#endif // #ifndef MASTER_GOLD
                 break;
             }
-				
+            ++i;
         }
 
-        if (m_pActorInvOwner && m_pQuickSlot)
+        for (u8 i = 1; i <= m_slot_count; ++i)
+        {
+            CUIDragDropListEx*	curr = m_pInvList[i];
+            if (curr)
+            {
+                if (RemoveItemFromList(curr, pItem))
+                    break;
+            }
+        }
+
+        if (m_pActorInvOwner)
             m_pQuickSlot->ReloadReferences(m_pActorInvOwner);
     }
     break;
