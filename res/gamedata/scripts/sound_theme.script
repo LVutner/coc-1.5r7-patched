@@ -148,6 +148,11 @@ function npc_sound:callback(npc_id)
 --	get_hud():RemoveCustomStatic("cs_subtitles_npc")
 
 	local st = db.storage[npc_id]
+	
+	if st == nil then
+		return
+	end
+	
 	if st.active_scheme == nil then
 		return
 	end
