@@ -212,7 +212,7 @@
 	<string id="st_water">
 		<text>‘л€га с водой</text>
 	</string>
-	<string id="st_water_desc">
-		<text>‘л€га содержаща€ в себе воду сомнительного происхождени€.</text>
+	<string id="st_water_descr">
+		<text>‘л€га содержаща€ в себе чистую воду.</text>
 	</string>
 </string_table>
