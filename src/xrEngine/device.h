@@ -258,11 +258,7 @@ public:
     virtual const RenderDeviceStatictics& GetStats() const override { return stats; }
     virtual void DumpStatistics(class IGameFont& font, class IPerformanceAlert* alert) override;
 
-    void time_factor(const float& time_factor)
-    {
-        Timer.time_factor(time_factor);
-        TimerGlobal.time_factor(time_factor);
-    }
+	void time_factor(const float& time_factor); //--#SM+#--
 
     IC const float time_factor() const
     {
