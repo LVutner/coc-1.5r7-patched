@@ -16,4 +16,5 @@ lib/
 res/gamedata_COC/.gitattributes
 res/gamedata_COC/.gitignore
 res/gamedata_COC/changelog_legend.txt
+Externals/LuaJIT-proj/lj_vm_x64.obj
 *.bak
