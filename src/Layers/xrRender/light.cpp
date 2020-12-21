@@ -18,6 +18,7 @@ light::light(void) : SpatialBase(g_SpatialSpace)
     right.set(0, 0, 0);
     range = 8.f;
     cone = deg2rad(60.f);
+	virtual_size = 0.1f;
     color.set(1, 1, 1, 1);
 
     m_volumetric_quality = 1;
@@ -342,6 +343,7 @@ void light::Export(light_Package& package)
                 L->set_rotation(cmDir[f], R);
                 L->set_cone(PI_DIV_2);
                 L->set_range(range);
+				L->set_virtual_size(virtual_size);
                 L->set_color(color);
                 L->spatial.sector = spatial.sector; //. dangerous?
                 L->s_spot = s_spot;
