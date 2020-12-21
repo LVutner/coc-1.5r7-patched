@@ -135,7 +135,7 @@ public:
 
     IC void RenderHud(BOOL B) { m_huditem_flags.set(fl_renderhud, B); }
     IC BOOL RenderHud() { return m_huditem_flags.test(fl_renderhud); }
-    attachable_hud_item* HudItemData();
+    attachable_hud_item* HudItemData() const;
     virtual void on_a_hud_attach();
     virtual void on_b_hud_detach();
     IC BOOL HudInertionEnabled() const { return m_huditem_flags.test(fl_inertion_enable); }
@@ -183,7 +183,7 @@ public:
 
     virtual CHudItem* cast_hud_item() { return this; }
     void PlayAnimIdleMovingCrouch(); //AVO: new crouch idle animation
-    bool isHUDAnimationExist(pcstr anim_name);
+    bool isHUDAnimationExist(pcstr anim_name) const;
 	struct inertion_params
 	{
 		float m_pitch_offset_r;
