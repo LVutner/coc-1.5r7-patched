@@ -279,7 +279,6 @@
     <ClInclude Include="blender_deffer_aref.h" />
     <ClInclude Include="blender_deffer_flat.h" />
     <ClInclude Include="blender_deffer_model.h" />
-    <ClInclude Include="blender_fxaa.h" />
     <ClInclude Include="blender_light_direct.h" />
     <ClInclude Include="blender_light_mask.h" />
     <ClInclude Include="blender_light_occq.h" />
@@ -288,7 +287,6 @@
     <ClInclude Include="blender_light_spot.h" />
     <ClInclude Include="blender_luminance.h" />
     <ClInclude Include="blender_ssao.h" />
-    <ClInclude Include="blender_ss_sunshafts.h" />
     <ClInclude Include="ComputeShader.h" />
     <ClInclude Include="CSCompiler.h" />
     <ClInclude Include="dx11HDAOCSBlender.h" />
@@ -444,7 +442,6 @@
     <ClCompile Include="blender_deffer_aref.cpp" />
     <ClCompile Include="blender_deffer_flat.cpp" />
     <ClCompile Include="blender_deffer_model.cpp" />
-    <ClCompile Include="blender_fxaa.cpp" />
     <ClCompile Include="blender_light_direct.cpp" />
     <ClCompile Include="blender_light_mask.cpp" />
     <ClCompile Include="blender_light_occq.cpp" />
@@ -453,7 +450,6 @@
     <ClCompile Include="blender_light_spot.cpp" />
     <ClCompile Include="blender_luminance.cpp" />
     <ClCompile Include="blender_ssao.cpp" />
-    <ClCompile Include="blender_ss_sunshafts.cpp" />
     <ClCompile Include="ComputeShader.cpp" />
     <ClCompile Include="CSCompiler.cpp" />
     <ClCompile Include="dx11HDAOCSBlender.cpp" />
@@ -466,7 +462,6 @@
     <ClCompile Include="r2_blenders.cpp" />
     <ClCompile Include="r2_R_calculate.cpp" />
     <ClCompile Include="r2_R_lights.cpp" />
-    <ClCompile Include="r4_rendertarget_phase_ss_sunshafts.cpp" />
     <ClCompile Include="r4_R_sun.cpp" />
     <ClCompile Include="r2_sector_detect.cpp" />
     <ClCompile Include="r2_test_hw.cpp" />
@@ -488,7 +483,6 @@
     <ClCompile Include="r4_rendertarget_phase_accumulator.cpp" />
     <ClCompile Include="r4_rendertarget_phase_bloom.cpp" />
     <ClCompile Include="r4_rendertarget_phase_combine.cpp" />
-    <ClCompile Include="r4_rendertarget_phase_FXAA.cpp" />
     <ClCompile Include="r4_rendertarget_phase_hdao.cpp" />
     <ClCompile Include="r4_rendertarget_phase_luminance.cpp" />
     <ClCompile Include="r4_rendertarget_phase_occq.cpp" />

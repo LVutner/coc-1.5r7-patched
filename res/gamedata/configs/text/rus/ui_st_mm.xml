@@ -169,7 +169,7 @@
 		<text>Гамма</text>
 	</string>
 	<string id="ui_mm_geometry_lod">
-		<text>Детализация объектов</text>
+		<text>Дальность детализации</text>
 	</string>
 	<string id="ui_mm_invert_mouse">
 		<text>Инвертировать мышь</text>
@@ -205,13 +205,13 @@
 		<text>Чувствительность мыши</text>
 	</string>
 	<string id="ui_mm_msaa_alphatest">
-		<text>Сглаживать А-тестовые объекты</text>
+		<text>Сглаживание альфа-канала</text>
 	</string>
 	<string id="st_opt_atest_msaa_dx10_0">
-		<text>DX10.0 стиль (Стандарт)</text>
+		<text>Стандарт</text>
 	</string>
 	<string id="st_opt_atest_msaa_dx10_1">
-		<text>DX10.1 стиль (Высокое качество)</text>
+		<text>Высокое качество</text>
 	</string>
 	<string id="ui_mm_msaa_opt">
 		<text>Оптимизировать сглаживание</text>
@@ -279,9 +279,9 @@
 	<string id="ui_mm_r2_sun_details">
 		<text>Тень травы</text>
 	</string>
-    	<string id="ui_mm_r__actor_shadow">
-    		<text>Тень от игрока</text>
-    	</string>
+	<string id="ui_mm_r__actor_shadow">
+		<text>Тень от игрока</text>
+	</string>
 	<string id="ui_mm_r2_sun_quality">
 		<text>Качество солнца</text>
 	</string>
@@ -346,7 +346,7 @@
 		<text>Сталкер</text>
 	</string>
 	<string id="ui_mm_sun_quality">
-		<text>Качество теней</text>
+		<text>Дальность прорисовки теней</text>
 	</string>
 	<string id="ui_mm_sun_shafts">
 		<text>Качество солнечных лучей</text>
@@ -423,7 +423,6 @@
 	<string id="st_opt_extreme">
 		<text>макс. высоко</text>
 	</string>
-
 	<string id="st_opt_ultra">
 		<text>очень высоко</text>
 	</string>
@@ -481,9 +480,9 @@
 	<string id="ui_mm_sleep_deprived">
 		<text>Недосыпание</text>
 	</string>
-        <string id="ui_mm_excl_dist">
-                <text>Радиус запрета спавна</text>
-        </string>
+	<string id="ui_mm_excl_dist">
+		<text>Радиус запрета спавна</text>
+	</string>
 	<string id="ui_mm_char_portrait">
 		<text>Исходный портрет</text>
 	</string>
@@ -527,7 +526,7 @@
 		<text>Локализация</text>
 	</string>
 	<string id="ui_mm_r__enable_grass_shadow">
-		<text>Тень травы</text>
+		<text>Тень от травы</text>
 	</string>
 	<string id="ui_mm_cod_pickup_mode">
 		<text>Автоподбор лута</text>
@@ -609,9 +608,6 @@
 	</string>
 	<string id="ui_mm_detector_charge">
 		<text>Заряд детекторов</text>
-	</string>
-	<string id="ui_mm_wpn_aim_toggle">
-		<text>Toggle aim</text>
 	</string>
 	<string id="ui_mm_draw_fps">
 		<text>Счетчик фпс</text>

@@ -258,7 +258,6 @@
     <ClInclude Include="blender_deffer_aref.h" />
     <ClInclude Include="blender_deffer_flat.h" />
     <ClInclude Include="blender_deffer_model.h" />
-    <ClInclude Include="blender_fxaa.h" />
     <ClInclude Include="blender_light_direct.h" />
     <ClInclude Include="blender_light_direct_cascade.h" />
     <ClInclude Include="blender_light_mask.h" />
@@ -271,7 +270,6 @@
     <ClInclude Include="..\xrRender\light_gi.h" />
     <ClInclude Include="..\xrRender\Light_Render_Direct.h" />
     <ClInclude Include="..\xrRender\light_smapvis.h" />
-    <ClInclude Include="blender_ss_sunshafts.h" />
     <ClInclude Include="r2.h" />
     <ClInclude Include="r2_rendertarget.h" />
     <ClInclude Include="r2_rendertarget_wallmarks.h" />
@@ -395,7 +393,6 @@
     <ClCompile Include="blender_deffer_aref.cpp" />
     <ClCompile Include="blender_deffer_flat.cpp" />
     <ClCompile Include="blender_deffer_model.cpp" />
-    <ClCompile Include="blender_fxaa.cpp" />
     <ClCompile Include="blender_light_direct.cpp" />
     <ClCompile Include="blender_light_direct_cascade.cpp" />
     <ClCompile Include="blender_light_mask.cpp" />
@@ -410,7 +407,6 @@
     <ClCompile Include="..\xrRender\Light_Render_Direct_ComputeXFS.cpp" />
     <ClCompile Include="..\xrRender\light_smapvis.cpp" />
     <ClCompile Include="..\xrRender\light_vis.cpp" />
-    <ClCompile Include="blender_ss_sunshafts.cpp" />
     <ClCompile Include="r2.cpp" />
     <ClCompile Include="r2_blenders.cpp" />
     <ClCompile Include="r2_loader.cpp" />
@@ -427,7 +423,6 @@
     <ClCompile Include="r2_rendertarget_phase_accumulator.cpp" />
     <ClCompile Include="r2_rendertarget_phase_bloom.cpp" />
     <ClCompile Include="r2_rendertarget_phase_combine.cpp" />
-    <ClCompile Include="r2_rendertarget_phase_FXAA.cpp" />
     <ClCompile Include="r2_rendertarget_phase_luminance.cpp" />
     <ClCompile Include="r2_rendertarget_phase_occq.cpp" />
     <ClCompile Include="r2_rendertarget_phase_PP.cpp" />
@@ -435,7 +430,6 @@
     <ClCompile Include="r2_rendertarget_phase_smap_D.cpp" />
     <ClCompile Include="r2_rendertarget_phase_smap_S.cpp" />
     <ClCompile Include="r2_rendertarget_phase_ssao.cpp" />
-    <ClCompile Include="r2_rendertarget_phase_ss_sunshafts.cpp" />
     <ClCompile Include="r2_R_calculate.cpp" />
     <ClCompile Include="r2_R_lights.cpp" />
     <ClCompile Include="r2_R_render.cpp" />

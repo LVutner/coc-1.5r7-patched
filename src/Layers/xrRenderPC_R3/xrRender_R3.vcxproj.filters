@@ -693,14 +693,8 @@
     <ClInclude Include="..\xrRender\D3DXRenderBase.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="blender_fxaa.h">
-      <Filter>Shading templates</Filter>
-    </ClInclude>
     <ClInclude Include="..\xrRender\KinematicsAddBoneTransform.hpp">
       <Filter>Refactored\Execution &amp; 3D\Visuals\Skeleton</Filter>
-    </ClInclude>
-    <ClInclude Include="blender_ss_sunshafts.h">
-      <Filter>Shading templates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1270,18 +1264,6 @@
     </ClCompile>
     <ClCompile Include="r3_R_sun.cpp">
       <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="blender_fxaa.cpp">
-      <Filter>Shading templates</Filter>
-    </ClCompile>
-    <ClCompile Include="r3_rendertarget_phase_FXAA.cpp">
-      <Filter>Core_Target</Filter>
-    </ClCompile>
-    <ClCompile Include="blender_ss_sunshafts.cpp">
-      <Filter>Shading templates</Filter>
-    </ClCompile>
-    <ClCompile Include="r3_rendertarget_phase_ss_sunshafts.cpp">
-      <Filter>Core_Target</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

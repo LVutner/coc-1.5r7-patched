@@ -32,13 +32,6 @@ const xr_token qsun_shafts_token[] = {
     {nullptr, 0}
 };
 
-u32 ps_sunshafts_mode = 0;
-xr_token sunshafts_mode_token[] = {
-    { "volumetric", 0 },
-    { "screen_space", 1 },
-    { nullptr, 0 }
-};
-
 u32 ps_r_ssao = 3;
 const xr_token qssao_token[] = {
     {"st_opt_off", 0},
@@ -99,8 +92,6 @@ const xr_token qsmap_size_token[] = {
     { "8192x8192", 8192 },
     { nullptr, 0 }
 };
-
-int ps_r2_fxaa = 0;
 
 // “Off”
 // “DX10.0 style [Standard]”
@@ -255,9 +246,6 @@ float ps_current_detail_scale = 1.f;
 xr_token ext_quality_token[] = {
     {"qt_off", 0}, {"qt_low", 1}, {"qt_medium", 2}, {"qt_high", 3}, {"qt_extreme", 4}, {nullptr, 0}};
 //-AVO
-
-float ps_r2_ss_sunshafts_length = 1.f;
-float ps_r2_ss_sunshafts_radius = 1.f;
 
 Flags32 ps_actor_shadow_flags = {0};
 
@@ -926,9 +914,6 @@ void xrRender_initconsole()
     if (Core.ParamFlags.test(xrCore::dev))
         CMD4(CCC_SunshaftsIntensity, "r__sunshafts_intensity", &ccSunshaftsIntensity, 0.f, 1.f);
 
-    CMD3(CCC_Token, "r2_sunshafts_mode", &ps_sunshafts_mode, sunshafts_mode_token);
-    CMD4(CCC_Float, "r2_ss_sunshafts_length", &ps_r2_ss_sunshafts_length, .2f, 1.5f);
-    CMD4(CCC_Float, "r2_ss_sunshafts_radius", &ps_r2_ss_sunshafts_radius, .5f, 2.f);
     CMD3(CCC_Mask, "r2_volumetric_lights", &ps_r2_ls_flags, R2FLAG_VOLUMETRIC_LIGHTS);
     // CMD3(CCC_Mask, "r2_sun_shafts", &ps_r2_ls_flags, R2FLAG_SUN_SHAFTS);
     CMD3(CCC_Token, "r2_sun_shafts", &ps_r_sun_shafts, qsun_shafts_token);
@@ -969,8 +954,6 @@ void xrRender_initconsole()
     dopt_min.set(1, 1, 1);
     dopt_max.set(390, 390, 390);
     CMD4(CCC_DetailsOpt, "r2_details_opt", &ps_r2_details_opt, dopt_min, dopt_max);
-    CMD4(CCC_Integer, "r2_fxaa", &ps_r2_fxaa, 0, 1);
-
     CMD4(CCC_Integer, "r__clear_models_on_unload", &ps_clear_models_on_unload, 0, 1); // Alundaio
     CMD4(CCC_Integer, "r__use_precompiled_shaders", &ps_use_precompiled_shaders, 0, 1); // Alundaio
     CMD4(CCC_Integer, "r__enable_grass_shadow", &ps_grass_shadow, 0, 1); // Alundaio
