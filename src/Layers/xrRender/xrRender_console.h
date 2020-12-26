@@ -203,12 +203,6 @@ enum
     R2FLAGEXT_SUN_ZCULLING = (1 << 8),
 };
 
-enum
-{
-    R2SS_VOLUMETRIC,
-    R2SS_SCREEN_SPACE,
-};
-
 extern ECORE_API Flags32 ps_actor_shadow_flags;
 
 enum

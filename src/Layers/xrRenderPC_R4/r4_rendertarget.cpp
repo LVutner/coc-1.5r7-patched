@@ -732,10 +732,7 @@ CRenderTarget::CRenderTarget()
             D3DFVF_TEXCOORDSIZE2(2) | D3DFVF_TEXCOORDSIZE2(3) | D3DFVF_TEXCOORDSIZE2(4) | D3DFVF_TEXCOORDSIZE4(5) |
             D3DFVF_TEXCOORDSIZE4(6);
         g_aa_AA.create(fvf_aa_AA, RCache.Vertex.Buffer(), RCache.QuadIB);
-
-        u32 fvf_KD = D3DFVF_XYZRHW | D3DFVF_TEX1 | D3DFVF_TEXCOORDSIZE2(0);
-        g_KD.create(fvf_KD, RCache.Vertex.Buffer(), RCache.QuadIB);
-
+		
         t_envmap_0.create(r2_T_envs0);
         t_envmap_1.create(r2_T_envs1);
     }
@@ -1116,7 +1113,6 @@ CRenderTarget::~CRenderTarget()
     }
     xr_delete(b_accum_mask);
     xr_delete(b_occq);
-    xr_delete(b_sunshafts);
     xr_delete(b_hdao_cs);
     if (RImplementation.o.dx10_msaa)
     {
