@@ -338,9 +338,10 @@ void CCameraManager::ApplyDevice(float _viewport_near)
         Device.m_SecondViewport.isCamReady = true;
     }
     else
+    {
         Device.m_SecondViewport.isCamReady = false;
-
-	Device.mProject.build_projection(deg2rad(m_cam_info.fFov), m_cam_info.fAspect, _viewport_near, m_cam_info.fFar);
+    }
+	Device.mProject.build_projection(deg2rad(Device.fFOV), m_cam_info.fAspect, _viewport_near, m_cam_info.fFar);
     //--#SM+# End--
 
     if (g_pGamePersistent && g_pGamePersistent->m_pMainMenu->IsActive())
