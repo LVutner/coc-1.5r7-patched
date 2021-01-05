@@ -218,6 +218,7 @@ void CFlashlight::OnAnimationEnd(u32 state)
 		case eHiding:
 		{
 			SwitchState(eHidden);
+            Switch(false, false);
 			g_player_hud->detach_item(this);
 		} break;
 		case eToggle:
@@ -323,8 +324,8 @@ bool CFlashlight::IsWorking()
 void CFlashlight::UpdateVisibility()
 {
 	//check visibility
-	attachable_hud_item* i0 = g_player_hud->attached_item(0);
-	if (i0 && HudItemData())
+	
+    if (HudItemData())
 	{
 		if (light_trace_bone.size())
 		{
@@ -333,9 +334,14 @@ void CFlashlight::UpdateVisibility()
 			{
 				bool visi = HudItemData()->m_model->LL_GetBoneVisible(bone_id);
 				if (visi != m_switched_on)
-					HudItemData()->m_model->LL_SetBoneVisible(bone_id, m_switched_on, TRUE);
+                    HudItemData()->m_model->LL_SetBoneVisible(bone_id, m_switched_on, false);
 			}
 		}
+    }
+    attachable_hud_item* i0 = g_player_hud->attached_item(0);
+    if (i0 && HudItemData())
+	{
+
 
 		bool bClimb = ((Actor()->MovingState() & mcClimb) != 0);
 		if (bClimb)
@@ -399,7 +405,6 @@ void CFlashlight::UpdateCL()
 
 	if (!HudItemData())
 	{
-		Switch(false, false);
 		return;
 	}
 
