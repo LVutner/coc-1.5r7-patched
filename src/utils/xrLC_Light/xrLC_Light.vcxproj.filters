@@ -563,7 +563,4 @@
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="..\..\TypeHelper.natvis" />
-  </ItemGroup>
 </Project>

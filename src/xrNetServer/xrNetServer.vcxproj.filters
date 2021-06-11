@@ -11,7 +11,4 @@
     <ClInclude Include="NET_Shared.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="..\TypeHelper.natvis" />
-  </ItemGroup>
 </Project>

@@ -24,7 +24,4 @@
       <Filter>Main</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="..\..\TypeHelper.natvis" />
-  </ItemGroup>
 </Project>

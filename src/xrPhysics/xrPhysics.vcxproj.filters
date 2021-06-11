@@ -594,7 +594,4 @@
       <Filter>physics\damage_receiver</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="..\TypeHelper.natvis" />
-  </ItemGroup>
 </Project>

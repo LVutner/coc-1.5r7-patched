@@ -8461,7 +8461,7 @@
     <ClCompile Include="game_cl_base.cpp">
       <Filter>Core\Server\Games\client</Filter>
     </ClCompile>
-	<ClCompile Include="DumpLuaBindUserdata.cpp" />
+    <ClCompile Include="DumpLuaBindUserdata.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="ai\monsters\chimera\chimera_attack_state.h">
@@ -8473,8 +8473,5 @@
     <CustomBuild Include="Explosive.h">
       <Filter>Core\Client\Objects\items &amp; weapons\Explosives</Filter>
     </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="..\TypeHelper.natvis" />
   </ItemGroup>
 </Project>

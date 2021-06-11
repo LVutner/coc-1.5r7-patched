@@ -1,23 +1,30 @@
-X-Ray Engine 1.6 expansion [![Build status](https://ci.appveyor.com/api/projects/status/vxccu3mfu33sp04i?svg=true)](https://ci.appveyor.com/project/Xottab-DUTY/xray-16)
-==========================
+## OpenXRay Call of Chernobyl 1.5 R7 x86/x64 engine
 
-This repository contains X-Ray Engine sources based on version 1.6.02.
-The original engine is used in S.T.A.L.K.E.R. Call of Pripyat game released by GSC Game World.
+This repository contains X-Ray Engine sources based on version 1.6.02 for Call of Chernobyl 1.5 R7 mod. The original engine is used in S.T.A.L.K.E.R. Call of Pripyat game released by GSC Game World and any changes to this engine are allowed for **non-commercial** use only.
 
-It is a place to share ideas on what to implement, gather people that want to work on the engine,
-and work on the source code.
+### HOW TO BUILD:
 
-Changelist is available in [wiki](https://github.com/OpenXRay/xray-16/wiki/Changes).
+---
+Before building clone the repository and init submodules.
+* If you are using Git console, use the command:  
+`git clone https://github.com/patryg4/coc-1.5r7-patched.git --recursive`
+---
 
-Build instructions: [doc/howto/build.txt](doc/howto/build.txt)
+The only compiler supported is Visual Studio 2017 with v141 platform toolset.  
+It's compulsory to get these packets in Visual Studio installer to build without problems:
 
-If you find a bug or have an enhancement request, file an [Issue](https://github.com/openxray/xray-16/issues).
 
-Pull requests appreciated! However, the following things should be taken into consideration:
-* We want to keep the game as close as possible to the vanilla game, so instead of introducing new gameplay features,
-  consider adding non-gameplay features, fixing bugs, improving performance and code quality
-* Major changes should be discussed before implementation
-* Follow the [procedures](doc/procedure)
+```sh
+ATL C++ Library
+MFC C++ Library
+C++/CLI support
+Windows CRT
+Windows CRT SDK
+Windows SDK 10.0.17763.0
+Visual C++ 2017 v141 tools
+```
 
-Be advised that this project is not sanctioned by GSC Game World in any way – and they remain the copyright holders
-of all the original source code.
+1. Open `coc-1.5r7-patched\src\engine.sln` with VS 2017.
+2. Select the project configuration what you need from the toolbar (`Mixed_COC`/`Release_COC`, `x86`/`x64`).
+3. Press `Build > Build Solution` wait few minutes and you have done.
+---

@@ -35,7 +35,4 @@
       <Filter>resources</Filter>
     </Image>
   </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="..\TypeHelper.natvis" />
-  </ItemGroup>
 </Project>

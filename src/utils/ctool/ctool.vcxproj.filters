@@ -16,7 +16,4 @@
       <Filter>PPMTrain</Filter>
     </CustomBuild>
   </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="..\..\TypeHelper.natvis" />
-  </ItemGroup>
 </Project>

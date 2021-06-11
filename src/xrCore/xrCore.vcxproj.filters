@@ -672,7 +672,4 @@
       <Filter>Debug core\DxErr</Filter>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="..\TypeHelper.natvis" />
-  </ItemGroup>
 </Project>

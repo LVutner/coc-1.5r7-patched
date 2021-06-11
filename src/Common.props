@@ -46,6 +46,9 @@
   </ItemGroup>
   
   <PropertyGroup Label="UserMacros">
+    <!-- 64-bit Visual C++ Toolset-->
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+    
     <!-- Default is v142 -->
     <xrPlatformToolset>v142</xrPlatformToolset>
     

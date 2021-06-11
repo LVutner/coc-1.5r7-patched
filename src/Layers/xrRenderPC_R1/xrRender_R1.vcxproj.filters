@@ -966,7 +966,4 @@
   <ItemGroup>
     <Text Include="Pipeline.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="..\..\TypeHelper.natvis" />
-  </ItemGroup>
 </Project>
