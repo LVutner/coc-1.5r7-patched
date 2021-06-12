@@ -3,7 +3,6 @@
 #include "FSkinned.h"
 #include "SkeletonX.h"
 #include "Layers/xrRenderDX10/dx10BufferUtils.h"
-#include "Layers/xrRenderGL/glBufferUtils.h"
 #include "xrEngine/EnnumerateVertices.h"
 #include "xrCore/xrDebug_macros.h"
 

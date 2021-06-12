@@ -4,7 +4,6 @@
 #include "xrCore/FMesh.hpp"
 #include "FVisual.h"
 #include "Layers/xrRenderDX10/dx10BufferUtils.h"
-#include "Layers/xrRenderGL/glBufferUtils.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

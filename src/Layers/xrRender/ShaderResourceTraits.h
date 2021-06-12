@@ -382,7 +382,7 @@ inline T* CResourceManager::CreateShader(const char* name, const char* filename 
 #ifdef USE_OGL
         DWORD flags = NULL;
 #elif defined(USE_DX10) || defined(USE_DX11)
-        DWORD flags = D3D10_SHADER_PACK_MATRIX_ROW_MAJOR;
+        DWORD flags = D3D10_SHADER_PACK_MATRIX_ROW_MAJOR; | D3DCOMPILE_OPTIMIZATION_LEVEL3;
 #else
         DWORD flags = D3DXSHADER_DEBUG | D3DXSHADER_PACKMATRIX_ROWMAJOR;
 #endif

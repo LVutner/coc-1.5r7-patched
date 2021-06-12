@@ -9,7 +9,6 @@
 #include "xrEngine/Environment.h"
 #endif
 #include "Layers/xrRenderDX10/dx10BufferUtils.h"
-#include "Layers/xrRenderGL/glBufferUtils.h"
 
 const int quant = 16384;
 const int c_hdr = 10;
