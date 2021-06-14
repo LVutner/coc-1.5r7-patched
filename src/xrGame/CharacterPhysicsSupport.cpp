@@ -40,6 +40,9 @@ extern BOOL death_anim_debug;
 
 #include "xrEngine/device.h"
 
+#define IK_CALC_DIST 100.f //Maksymalny dystans IK
+#define IK_ALWAYS_CALC_DIST 20.f //Dystans na ktorym IK zawsze jest uzywane
+
 #define USE_SMART_HITS
 #define USE_IK
 
@@ -610,8 +613,22 @@ void CCharacterPhysicsSupport::in_UpdateCL()
     //}
     else if (ik_controller())
     {
-        update_interactive_anims();
-        ik_controller()->Update();
+		CFrustum& view_frust = ::Render->ViewBase;
+		vis_data& vis = m_EntityAlife.Visual()->getVisData();
+		Fvector p;
+
+		m_EntityAlife.XFORM().transform_tiny(p, vis.sphere.P);
+
+		float dist = Device.vCameraPosition.distance_to(p);
+
+		if (dist < IK_CALC_DIST)
+		{
+			if (view_frust.testSphere_dirty(p, vis.sphere.R) || dist < IK_ALWAYS_CALC_DIST)
+			{
+				update_interactive_anims();
+				ik_controller()->Update();
+			}
+		}
     }
 
 #ifdef DEBUG
